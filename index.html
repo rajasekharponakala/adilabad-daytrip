@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#17362c">
+    <meta name="description" content="Plan one realistic day around Adilabad, Telangana: nature, geology, art and heritage.">
+    <title>Adilabad Daytrip · One free day</title>
+  </head>
+  <body>
+    <a class="skip" href="#planner">Skip to planner</a>
+    <header class="hero">
+      <nav class="wrap nav" aria-label="Main"><a class="brand" href="#top">◈ &nbsp; Adilabad Daytrip</a><a href="#places">Explore places ↗</a></nav>
+      <div class="wrap intro" id="top">
+        <p class="eyebrow">TELANGANA &nbsp;/&nbsp; FIELD NOTES &nbsp;/&nbsp; PILOT 01</p>
+        <h1>One free day<br><em>in Adilabad.</em></h1>
+        <p>From stone inscriptions to rocky cascades, find a day out that fits your interests and gets you back on time.</p>
+        <p class="telugu" lang="te">మీ ఆసక్తులకు తగ్గట్టుగా ఆదిలాబాద్‌లో ఒక రోజు.</p>
+      </div>
+    </header>
+    <main class="wrap" id="planner">
+      <div class="layout">
+        <section class="panel" aria-labelledby="form-title">
+          <p class="eyebrow">01 / TRIP DETAILS</p><h2 id="form-title">Make it your day</h2>
+          <form id="trip">
+            <label>Start and return point<select name="origin" required></select></label>
+            <div class="timegrid">
+              <label>Trip date<input type="date" name="date" required></label>
+              <label>Start (IST)<input type="time" name="from" value="09:00" required></label>
+              <label>Return by (IST)<input type="time" name="until" value="17:00" required></label>
+            </div>
+            <div class="twocol">
+              <label>Getting around<select name="mode"><option value="car">Taxi or private car</option><option value="foot">On foot (up to 7 km)</option></select></label>
+              <label>Setting<select name="setting"><option value="any">Indoors or outdoors</option><option value="outdoor">Outdoors</option><option value="indoor">Indoors only</option></select></label>
+            </div>
+            <fieldset><legend>Rank your interests <small>(optional)</small></legend>
+              <div class="chips" id="interests"></div><p class="hint" id="rank" aria-live="polite">Pick up to three, in order. No choices means an open mix.</p>
+            </fieldset>
+            <label class="check"><input type="checkbox" name="lunch" checked> Leave a 40-minute lunch break if the route spans lunchtime</label>
+            <details><summary>Add a locally confirmed stop</summary>
+              <p class="hint">Use only if the host or site authority confirmed public access for your trip date. These times are not supplied by this app.</p>
+              <div id="confirmations"></div>
+            </details>
+            <button type="submit" class="primary">Build my itinerary <span aria-hidden="true">→</span></button>
+          </form>
+        </section>
+        <section class="panel results" id="results" aria-labelledby="result-title" tabindex="-1">
+          <p class="eyebrow">02 / YOUR ROUTE</p><h2 id="result-title">Your day plan</h2>
+          <p id="status" role="status" aria-live="polite">Choose your trip details to see a route and timeline.</p>
+          <div id="output"></div>
+        </section>
+      </div>
+      <section id="places" class="places" aria-labelledby="places-title">
+        <p class="eyebrow">03 / FIELD GUIDE</p><h2 id="places-title">Explore the pilot area</h2>
+        <p>Places researched from published sources. Discovery listings are not added to the itinerary.</p>
+        <div id="catalog" class="cards"></div>
+      </section>
+    </main>
+    <footer><div class="wrap"><strong>Adilabad Daytrip</strong><p>Research pilot, not a booking or live access service. Verify opening times, closures, walkability and weather before leaving.</p><a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a> · Routes from FOSSGIS OSRM.</div></footer>
+    <noscript><p>This planner needs JavaScript to build a route on your device.</p></noscript>
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>

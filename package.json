@@ -1,0 +1,16 @@
+{
+  "name": "adilabad-daytrip",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --base=./",
+    "preview": "vite preview",
+    "test": "node --test test/*.test.js",
+    "test:browser": "playwright test",
+    "routes:refresh": "node scripts/refresh-routes.js"
+  },
+  "devDependencies": { "@playwright/test": "1.65.1", "vite": "7.3.8" }
+}
