@@ -1,3 +1,5 @@
+import { newExhibits } from './geo-lab-expansion.js';
+
 // Small deterministic triangle meshes. Coordinates are east, north, up;
 // heights and colours are exaggerated for legibility, not survey measurements.
 const tau = 2 * Math.PI;
@@ -94,5 +96,6 @@ export const exhibits = {
   deccan:{name:'Deccan Traps',place:'Western India',process:'Flood-basalt eruptions',mesh:deccan,
     stages:[['First flow','A sheet of lava spreads over the older ground. Orange marks the hot surface; beneath it, the cooling flow becomes a solid basalt layer.'],['Flow upon flow','Later eruptions cover the cooled rock with fresh lava. View the edge to count five flow units in this sample; the real province contains many more.'],['Eroded steps','As rock wears away, harder basalt forms ledges above gentler slopes. Compare this outline with the broad stack in stage two: erosion reveals the steps.']]},
   'st-marys':{name:'St Mary’s Islands',place:'Karnataka',process:'Cooling and contraction',mesh:columns,
-    stages:[['Hot rock','Start with a continuous mass of hot volcanic rock. Its broad upper surface marks where heat can escape to the surroundings.'],['Cooling cracks','Cooling rock contracts. Cracks meet to form polygons at the surface and grow inwards as the cooling front advances. Look down to see the network.'],['Exposed columns','Erosion exposes the sides of the polygonal columns and removes pieces of different heights. Look sideways to trace vertical joints; from above, those same joints bound each polygon.']]}
+    stages:[['Hot rock','Start with a continuous mass of hot volcanic rock. Its broad upper surface marks where heat can escape to the surroundings.'],['Cooling cracks','Cooling rock contracts. Cracks meet to form polygons at the surface and grow inwards as the cooling front advances. Look down to see the network.'],['Exposed columns','Erosion exposes the sides of the polygonal columns and removes pieces of different heights. Look sideways to trace vertical joints; from above, those same joints bound each polygon.']]},
+  ...newExhibits,
 };

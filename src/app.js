@@ -1,6 +1,7 @@
 import { hubs, interests, places, reviewed, starts } from './catalog.js';
 import { atlas, filterAtlas, regions } from './atlas.js';
 import { adilabadToday, clock, minute, planTrip } from './planner.js';
+import { guideUrl,labModels } from './guide-links.js';
 import photos from './place-photos.json';
 import './styles.css';
 
@@ -67,7 +68,9 @@ for (const p of places) {
   box.append(fields);
   $('confirmations').append(box);
 }
-setHub('adilabad');
+const query = new URLSearchParams(location.search);
+const initialHub = query.get('hub');
+setHub(Object.hasOwn(hubs,initialHub) ? initialHub : 'adilabad');
 
 for (const [value,label] of [[atlas.length,'places to explore'],[regions.length,'states & territories'],[Object.keys(hubs).length,'planning hubs']]) {
   const item = el('div',null,'coverage-stat');
@@ -78,7 +81,6 @@ for (const state of regions) $('atlas-state').append(Object.assign(el('option',s
 const atlasThemes = new Map();
 const knownPlaces = new Set(atlas.map(p => p.id));
 const symbols = { geology:'◈', nature:'≈', culture:'✷', heritage:'◇', science:'✧', birds:'⌁', farm:'✳' };
-const labModels = new Set(['lonar','deccan','st-marys']);
 let labModule, lab, chosenModel;
 async function openLab(model) {
   chosenModel = model ?? chosenModel ?? 'lonar';
@@ -100,6 +102,7 @@ async function openLab(model) {
   }
 }
 $('load-lab').addEventListener('click',() => void openLab());
+if (location.hash === '#geo-lab' && labModels.has(query.get('model'))) void openLab(query.get('model'));
 let theme = '', pageLimit = 6, savedOnly = false;
 const saved = new Set();
 try {
@@ -145,6 +148,9 @@ function atlasCard(p) {
   }
   if (p.lat != null && p.access !== 'discovery') source.append(markerLink(p));
   const actions = el('div',null,'card-actions');
+  const guide = Object.assign(el('a','Read field guide ↗'),{href:`./${guideUrl(p.id)}`});
+  guide.setAttribute('aria-label',`Read field guide: ${p.name}`);
+  actions.append(guide);
   const save = Object.assign(el('button',saved.has(p.id)?'Saved':'Save place','secondary'),{type:'button'});
   const labelSave = () => save.setAttribute('aria-label',`${saved.has(p.id)?'Saved':'Save place'}: ${p.name}`);
   labelSave();

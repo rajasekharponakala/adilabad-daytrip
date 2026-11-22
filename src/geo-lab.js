@@ -71,7 +71,10 @@ export function mountGeoLab(container, initialModel='lonar') {
     part('stage').textContent=`Stage ${i+1} · ${title}`;part('note').textContent=description;
     canvas.setAttribute('aria-label',`3D model of ${item.name}: ${title}`);render();
   }
-  function reset() {yaw=31;tilt=model==='lonar'?39:26;}
+  function reset() {
+    yaw=({meghalayan:18,varkala:-48,majuli:12,dholavira:-25})[model]??31;
+    tilt=({lonar:39,meghalayan:17,majuli:53,dholavira:42})[model]??26;
+  }
   function select(id) {
     if(dead) return;
     model=ids.includes(id)?id:'lonar';const item=exhibits[model];reset();

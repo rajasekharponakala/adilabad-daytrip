@@ -2,7 +2,9 @@
 
 A mobile-first geotourism atlas and one-day planner. Browse India by place, state or union territory, and theme; save ideas on the current device. In Adilabad and Bengaluru, enter a time window, choose a start point, mode and pace, and generate a round trip with buffered travel times. English UI with Telugu names for planning stops. No account or analytics; trip inputs remain on the device.
 
-The 3D Geo Lab is an on-demand set of educational models tied to three atlas entries. Explore a meteorite impact at Lonar, successive lava flows in the Deccan Traps, or the cooling joints of St. Mary’s Islands. The models are schematic, not measured terrain or numerical simulations. No API key, account, or external 3D service is required to use them.
+The 3D Geo Lab is an on-demand set of seven educational models. It covers Lonar’s meteorite impact, Deccan lava flows, cooling joints at St. Mary’s Islands, cliff retreat at Varkala, cave formation in Meghalaya, river-island change at Majuli, and water storage at Dholavira. Each exhibit has three stages and keyboard, button and pointer rotation. The models are schematic, not measured terrain, archaeological reconstructions or numerical forecasts. No API key, account, or external 3D service is required.
+
+The `/places/` directory links to 48 individual field guides. Each is built as static HTML (no JavaScript required), with an attributed image, editorial notes about the site, things to observe, access checks and source links. Changes to the atlas photo or notes data are included automatically at build time. Guide text lives in `src/field-notes.js`.
 
 ## Run and verify
 

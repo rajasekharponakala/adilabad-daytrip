@@ -112,7 +112,7 @@ test('3D lab is loaded on demand and an atlas card opens its matching exhibit',a
   await expect(page.locator('[data-geo-model="st-marys"]')).toHaveAttribute('aria-pressed','true');
   const canvas = page.locator('#lab-mount canvas');
   const pixels = () => canvas.evaluate(el=>el.toDataURL());
-  for (const model of ['st-marys','deccan','lonar']) {
+  for (const model of ['st-marys','deccan','varkala','meghalayan','majuli','dholavira','lonar']) {
     await page.locator(`[data-geo-model="${model}"]`).click();
     const frames = new Set();
     for (const stage of [1,2,3]) {
@@ -135,4 +135,37 @@ test('3D lab is loaded on demand and an atlas card opens its matching exhibit',a
   const {violations} = await new AxeBuilder({page}).include('#geo-lab').withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();
   expect(violations.map(v=>({id:v.id,targets:v.nodes.map(n=>n.target)}))).toEqual([]);
   expect(errors).toEqual([]);
+});
+
+test('field guides work as direct links without JavaScript', async ({browser,baseURL})=>{
+  const page=await browser.newPage({javaScriptEnabled:false,viewport:{width:360,height:800}});
+  try {
+    const response=await page.goto(new URL('places/',baseURL).href);
+    expect(response.status()).toBe(200);
+    await expect(page.locator('.directory a')).toHaveCount(48);
+    await page.getByRole('link',{name:'Bhimbetka Rock Shelters'}).click();
+    await expect(page).toHaveURL(/\/places\/bhimbetka\/$/);
+    await expect(page.getByRole('heading',{name:'Bhimbetka Rock Shelters',level:1})).toBeVisible();
+    await expect(page.getByRole('heading',{name:'What to look for'})).toBeVisible();
+    await expect.poll(()=>page.locator('figure img').evaluate(img=>img.naturalWidth)).toBeGreaterThan(0);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+  } finally {await page.close();}
+});
+
+test('atlas card links to a guide and the guide deep-links to its exact 3D exhibit', async ({page})=>{
+  await page.goto('./');
+  await page.locator('#place-varkala').getByRole('link',{name:/Read field guide/}).click();
+  await expect(page).toHaveURL(/\/places\/varkala\/$/);
+  await expect(page.locator('figcaption a')).toHaveCount(2);
+  const {violations}=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();
+  expect(violations.map(v=>v.id)).toEqual([]);
+  await page.getByRole('link',{name:/Open this 3D exhibit/}).click();
+  await expect(page).toHaveURL(/\?model=varkala#geo-lab$/);
+  await expect(page.locator('[data-geo-model="varkala"]')).toHaveAttribute('aria-pressed','true');
+});
+
+test('a routed guide opens its matching planning hub',async ({page})=>{
+  await page.goto('./places/lalbagh/');
+  await page.getByRole('link',{name:/Open the day planner/}).click();
+  await expect(page.getByLabel('Planning hub')).toHaveValue('bengaluru');
 });
