@@ -3,6 +3,8 @@ import { hubs, interests } from '../src/catalog.js';
 import { fieldNotes } from '../src/field-notes.js';
 import { guideUrl, labModels, labUrl } from '../src/guide-links.js';
 import photos from '../src/place-photos.json' with { type: 'json' };
+import { layers } from '../src/layer-definitions.js';
+import { entries, renderLayerPage, validateLayers } from './render-layers.js';
 
 const escape = value => String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 const byId = new Map(atlas.map(p=>[p.id,p]));
@@ -12,7 +14,7 @@ const layout = ({root,title,description,inner}) => `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f8f4e9">
 <title>${escape(title)} · Fieldday India</title><meta name="description" content="${escape(description)}"><link rel="stylesheet" href="${root}guide.css"></head>
 <body><a class="skip" href="#main">Skip to main content</a><header class="bar"><nav class="wrap" aria-label="Main">
-${anchor(root,'◈ Fieldday India')}${anchor(`${root}places/`,'Field guides')}${anchor(`${root}#geo-lab`,'3D Lab')}</nav></header>
+${anchor(root,'◈ Fieldday India')}${anchor(`${root}places/`,'Field guides')}${anchor(`${root}layers/`,'Heritage layers')}${anchor(`${root}#geo-lab`,'3D Lab')}</nav></header>
 <main id="main" class="wrap">${inner}</main><footer><div class="wrap">Fieldday India · Always confirm current access before setting out.</div></footer></body></html>`;
 
 export function renderPlace(id) {
@@ -22,6 +24,7 @@ export function renderPlace(id) {
   const photo = photos[id];
   if (!story || !look || !check || !photo) throw Error(`Field guide is incomplete: ${id}`);
   const root = '../../';
+  const placeLayers=entries.filter(e=>e.placeId===id);
   const related = atlas.filter(x=>x.id!==id).map((x,i)=>[x, (x.state===p.state?5:0)+(x.tags[0]===p.tags[0]?3:0)+x.tags.filter(tag=>p.tags.includes(tag)).length,i])
     .filter(([,score])=>score>0).sort((a,b)=>b[1]-a[1]||a[2]-b[2]).slice(0,3);
   return layout({root,title:p.name,description:story,inner:`
@@ -32,6 +35,7 @@ export function renderPlace(id) {
     <figure><img src="${root}place-media/${escape(photo.file)}" alt="${escape(photo.alt)}" width="640" height="400" fetchpriority="high">
     <figcaption>${photo.context?'Context image, not the exact site. ':''}${anchor(photo.source,photo.author)} · ${anchor(photo.licenseUrl,photo.license)} · resized and cropped in display.</figcaption></figure></header>
     <div class="notes"><section><h2>Why it matters</h2><p>${escape(story)}</p></section><section><h2>What to look for</h2><p>${escape(look)}</p></section><section><h2>Before you go</h2><p>${escape(check)}</p></section></div>
+    ${placeLayers.length?`<section class="related"><h2>Explore this place through more layers</h2><ul>${placeLayers.map(e=>`<li>${anchor(`${root}layers/${e.layer}/#${e.id}`,`${layers[e.layer].name}: ${e.name}`)}</li>`).join('')}</ul></section>`:''}
     ${labModels.has(id)?`<aside class="callout" aria-label="3D exhibit"><h2>Try the 3D model</h2><p>Rotate the landscape and compare three stages. The model is a simplified teaching aid, not measured terrain.</p>${anchor(root+labUrl(id),'Open this 3D exhibit ↗')}</aside>`:''}
     ${p.hub && p.access!=='discovery'?`<aside class="callout" aria-label="Day planner"><h2>Plan time to visit</h2><p>This stop can be considered in the ${escape(hubs[p.hub])} planner, subject to the limits above.</p>${anchor(`${root}?hub=${encodeURIComponent(p.hub)}#planner`,'Open the day planner ↗')}</aside>`:''}
     <section class="sources"><h2>Sources and further reading</h2><ul>${p.sources.map(([label,url])=>`<li>${anchor(url,label)}</li>`).join('')}</ul></section>
@@ -42,7 +46,7 @@ export function renderGuideIndex() {
   return layout({root:'../',title:'Heritage field guides',description:'Discover India’s sites with illustrated notes on geology, history and visits.',inner:`
     <nav class="crumb" aria-label="Breadcrumb">${anchor('../#places','India atlas')} <span aria-hidden="true">/</span> Field guides</nav>
     <h1>Heritage field guides</h1><p class="intro">${atlas.length} illustrated guides across ${regions.length} states and union territories. Find out why each place matters, what to look for, and what to check before you visit.</p>
-    <p>${anchor('../#places','Search and filter the atlas ↗')}</p>
+    <p>${anchor('../#places','Search and filter the atlas ↗')} · ${anchor('../layers/','Explore heritage layers ↗')}</p>
     <div class="directory">${regions.map(region=>`<section><h2>${escape(region)}</h2><ul>${atlas.filter(p=>p.state===region).map(p=>`<li>${anchor(`../${guideUrl(p.id)}`,p.name)}</li>`).join('')}</ul></section>`).join('')}</div>`});
 }
 
@@ -52,17 +56,20 @@ export function fieldGuidePlugin() {
     configureServer(server) {
       server.middlewares.use((req,res,next)=>{
         const pathname=new URL(req.url,'http://localhost').pathname;
-        const match=/^\/places(?:\/([a-z0-9-]+))?\/?$/.exec(pathname);
+        const match=/^\/(places|layers)(?:\/([a-z0-9-]+))?\/?$/.exec(pathname);
         if (!match) return next();
-        const html=match[1]?renderPlace(match[1]):renderGuideIndex();
+        const html=match[1]==='layers'?renderLayerPage({id:match[2],layout,anchor,escape}):match[2]?renderPlace(match[2]):renderGuideIndex();
         if (!html) {res.statusCode=404;return res.end('Field guide not found');}
         if(!pathname.endsWith('/')) {res.statusCode=301;res.setHeader('Location',pathname+'/');return res.end();}
         res.setHeader('Content-Type','text/html; charset=utf-8');res.end(html);
       });
     },
     generateBundle() {
+      validateLayers();
       this.emitFile({type:'asset',fileName:'places/index.html',source:renderGuideIndex()});
       for(const p of atlas)this.emitFile({type:'asset',fileName:`${guideUrl(p.id)}index.html`,source:renderPlace(p.id)});
+      for(const id of ['',...Object.keys(layers)]) this.emitFile({type:'asset',fileName:`layers/${id?id+'/':''}index.html`,source:renderLayerPage({id,layout,anchor,escape})});
+      this.info(`Generated ${Object.keys(layers).length} heritage layers with ${entries.length} sourced notes`);
       this.info(`Generated ${atlas.length} place guides and 1 guide directory`);
     },
   };

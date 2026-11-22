@@ -169,3 +169,21 @@ test('a routed guide opens its matching planning hub',async ({page})=>{
   await page.getByRole('link',{name:/Open the day planner/}).click();
   await expect(page.getByLabel('Planning hub')).toHaveValue('bengaluru');
 });
+
+test('heritage layers can be browsed directly without JavaScript and show editorial coverage',async ({browser,baseURL})=>{
+  const page=await browser.newPage({javaScriptEnabled:false,viewport:{width:360,height:800}});
+  try {
+    const response=await page.goto(new URL('layers/',baseURL).href);
+    expect(response.status()).toBe(200);
+    await expect(page.locator('.layer-grid section')).toHaveCount(8);
+    await expect(page.locator('table tbody tr')).toHaveCount(36);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+    await page.getByRole('link',{name:'Astrology & calendar traditions'}).click();
+    await expect(page.getByText(/not predictive science/)).toBeVisible();
+    expect(await page.locator('.layer-grid article').count()).toBeGreaterThanOrEqual(5);
+    await page.locator('.layer-grid article summary').first().click();
+    await expect(page.locator('.layer-grid article details a').first()).toBeVisible();
+    await page.getByRole('link',{name:/Observational astronomy/}).click();
+    await expect(page.getByRole('heading',{level:1,name:'Observational astronomy'})).toBeVisible();
+  } finally {await page.close();}
+});
