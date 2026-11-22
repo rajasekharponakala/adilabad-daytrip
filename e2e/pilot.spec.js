@@ -111,7 +111,9 @@ test('3D lab is loaded on demand and an atlas card opens its matching exhibit',a
   await expect(page.locator('#lab-title')).toBeFocused();
   await expect(page.locator('[data-geo-model="st-marys"]')).toHaveAttribute('aria-pressed','true');
   const canvas = page.locator('#lab-mount canvas');
-  const pixels = () => canvas.evaluate(el=>el.toDataURL());
+  // Stage labels update before the software renderer's requestAnimationFrame.
+  // Capture after a paint opportunity, including when the CI runner is busy.
+  const pixels = () => canvas.evaluate(el=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve(el.toDataURL())))));
   for (const model of ['st-marys','deccan','varkala','meghalayan','majuli','dholavira','lonar']) {
     await page.locator(`[data-geo-model="${model}"]`).click();
     const frames = new Set();
