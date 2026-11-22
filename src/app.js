@@ -1,6 +1,7 @@
 import { hubs, interests, places, reviewed, starts } from './catalog.js';
 import { atlas, filterAtlas, regions } from './atlas.js';
 import { adilabadToday, clock, minute, planTrip } from './planner.js';
+import photos from './place-photos.json';
 import './styles.css';
 
 const $ = id => document.getElementById(id);
@@ -77,6 +78,28 @@ for (const state of regions) $('atlas-state').append(Object.assign(el('option',s
 const atlasThemes = new Map();
 const knownPlaces = new Set(atlas.map(p => p.id));
 const symbols = { geology:'◈', nature:'≈', culture:'✷', heritage:'◇', science:'✧', birds:'⌁', farm:'✳' };
+const labModels = new Set(['lonar','deccan','st-marys']);
+let labModule, lab, chosenModel;
+async function openLab(model) {
+  chosenModel = model ?? chosenModel ?? 'lonar';
+  const labStatus = $('lab-status');
+  if (lab) { lab.select(chosenModel); $('lab-title').focus({preventScroll:true}); return; }
+  labStatus.textContent = 'Loading the 3D lab…';
+  try {
+    const { mountGeoLab } = await (labModule ??= import('./geo-lab.js'));
+    if (!lab) lab = mountGeoLab($('lab-mount'), chosenModel);
+    $('lab-launch').hidden = true;
+    labStatus.textContent = '3D lab ready.';
+    if (location.hash === '#geo-lab' || document.activeElement === $('load-lab') || document.activeElement === document.body) {
+      $('lab-title').focus({preventScroll:true});
+    }
+  } catch (error) {
+    console.error(error);
+    labModule = undefined;
+    labStatus.textContent = 'The 3D lab could not load. Try again.';
+  }
+}
+$('load-lab').addEventListener('click',() => void openLab());
 let theme = '', pageLimit = 6, savedOnly = false;
 const saved = new Set();
 try {
@@ -93,8 +116,18 @@ function atlasCard(p) {
   const flag = el('p',label,'flag');
   flag.dataset.access = p.access;
   const artwork = el('div',null,'card-art');
-  artwork.append(flag,el('span',symbols[p.tags[0]],'card-symbol'));
-  artwork.lastChild.setAttribute('aria-hidden','true');
+  const symbol = el('span',symbols[p.tags[0]],'card-symbol');
+  symbol.setAttribute('aria-hidden','true');
+  artwork.append(flag,symbol);
+  const photo = photos[p.id];
+  if (photo) {
+    const image = Object.assign(el('img',null,'place-photo'),{ alt:photo.alt, loading:'lazy', decoding:'async', width:640, height:400 });
+    image.addEventListener('load',() => artwork.classList.add('has-photo'),{once:true});
+    image.addEventListener('error',() => { image.remove(); artwork.querySelector('.context-badge')?.remove(); },{once:true});
+    artwork.prepend(image);
+    if (photo.context) artwork.append(el('span','Context image','context-badge'));
+    image.src = `${new URL(import.meta.env.BASE_URL,document.baseURI).href}place-media/${photo.file}`;
+  }
   const body = el('div',null,'card-body');
   const eyebrow = el('p',p.state,'eyebrow');
   const title = el('h3',p.name);
@@ -104,6 +137,12 @@ function atlasCard(p) {
   tags.append(...p.tags.map(t => el('li',interests[t])));
   const source = el('details',null,'source-details');
   source.append(el('summary','Sources and visit notes'),links(p));
+  if (photo) {
+    const credit = el('p',null,'photo-credit');
+    credit.append(photo.context ? 'Context image: ' : 'Photo: ',Object.assign(el('a',photo.author),{href:photo.source}), ' · ',
+      Object.assign(el('a',photo.license),{href:photo.licenseUrl}), ' · resized and cropped in display.');
+    source.append(credit);
+  }
   if (p.lat != null && p.access !== 'discovery') source.append(markerLink(p));
   const actions = el('div',null,'card-actions');
   const save = Object.assign(el('button',saved.has(p.id)?'Saved':'Save place','secondary'),{type:'button'});
@@ -120,6 +159,12 @@ function atlasCard(p) {
     if (savedOnly) { renderAtlas(); $('saved-only').focus({preventScroll:true}); }
   });
   actions.append(save);
+  if (labModels.has(p.id)) {
+    const modelLink = Object.assign(el('a','Explore in 3D ↗'),{href:'#geo-lab'});
+    modelLink.setAttribute('aria-label',`Explore in 3D: ${p.name}`);
+    modelLink.addEventListener('click',() => void openLab(p.id));
+    actions.append(modelLink);
+  }
   if (p.hub && p.access !== 'discovery') {
     const go = Object.assign(el('a','Open planner ↗'),{href:'#planner'});
     go.addEventListener('click',() => setHub(p.hub));

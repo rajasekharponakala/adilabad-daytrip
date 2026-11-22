@@ -85,3 +85,54 @@ test('keyboard navigation and automated WCAG checks pass on mobile with a result
   const {violations} = await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();
   expect(violations.map(v=>({id:v.id,targets:v.nodes.map(n=>n.target)}))).toEqual([]);
 });
+
+test('atlas imagery is local, lazy-loaded, and credited on the Pages subpath', async ({page})=>{
+  await page.goto('./');
+  const card = page.locator('#place-lonar');
+  const image = card.locator('img');
+  await image.scrollIntoViewIfNeeded();
+  await expect(image).toHaveAttribute('loading','lazy');
+  await expect(image).toHaveAttribute('src',/\/adilabad-daytrip\/place-media\//);
+  await expect.poll(()=>image.evaluate(el=>el.naturalWidth)).toBeGreaterThan(0);
+  await card.getByText('Sources and visit notes').click();
+  await expect(card.locator('.photo-credit a')).toHaveCount(2);
+});
+
+test('3D lab is loaded on demand and an atlas card opens its matching exhibit',async ({page})=>{
+  const errors = [];
+  page.on('pageerror', e=>errors.push(e.message));
+  await page.setViewportSize({width:360,height:800});
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.goto('./');
+  await expect(page.locator('#lab-mount')).toBeEmpty();
+  await page.locator('#place-st-marys').getByRole('link',{name:/Explore in 3D/}).click();
+  await expect(page.locator('#lab-status')).toHaveText('3D lab ready.');
+  await expect(page.locator('#load-lab')).toBeHidden();
+  await expect(page.locator('#lab-title')).toBeFocused();
+  await expect(page.locator('[data-geo-model="st-marys"]')).toHaveAttribute('aria-pressed','true');
+  const canvas = page.locator('#lab-mount canvas');
+  const pixels = () => canvas.evaluate(el=>el.toDataURL());
+  for (const model of ['st-marys','deccan','lonar']) {
+    await page.locator(`[data-geo-model="${model}"]`).click();
+    const frames = new Set();
+    for (const stage of [1,2,3]) {
+      const prior = await pixels();
+      const control = page.locator(`[data-geo-stage="${stage}"]`);
+      await control.click();
+      await expect(control).toHaveAttribute('aria-pressed','true');
+      await expect.poll(async()=>await pixels() !== prior).toBe(true);
+      frames.add(await pixels());
+    }
+    expect(frames.size).toBe(3);
+  }
+  const initial = await pixels();
+  await canvas.focus();
+  await page.keyboard.press('ArrowRight');
+  await expect.poll(async()=>await pixels() !== initial).toBe(true);
+  await page.keyboard.press('Home');
+  await expect.poll(async()=>await pixels() === initial).toBe(true);
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth)).toBeLessThanOrEqual(360);
+  const {violations} = await new AxeBuilder({page}).include('#geo-lab').withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa']).analyze();
+  expect(violations.map(v=>({id:v.id,targets:v.nodes.map(n=>n.target)}))).toEqual([]);
+  expect(errors).toEqual([]);
+});

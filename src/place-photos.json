@@ -1,0 +1,392 @@
+{
+  "lonar": {
+    "file": "lonar.webp",
+    "alt": "Lonar Lake and the far crater rim, seen from the rocky inner shore",
+    "author": "Akash Sharma",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Lonar_Crater.jpg"
+  },
+  "varkala": {
+    "file": "varkala.webp",
+    "alt": "Surf washing a beach below the tree-covered Varkala Cliffs",
+    "author": "Ganesh Mohan T",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Varkala_cliff_06.jpg"
+  },
+  "bhimbetka": {
+    "file": "bhimbetka.webp",
+    "alt": "The sandstone overhang of Boar Rock at Bhimbetka",
+    "author": "Dinesh Valke from Thane, India",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Bhimbetka_rock_shelters_Boar_Rock_(9971256856).jpg"
+  },
+  "st-marys": {
+    "file": "st-marys.webp",
+    "alt": "Columnar rock formations among palms on St. Mary’s Islands",
+    "author": "Nativeplants garden",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:St._Mary%27s_Islands_3.jpg"
+  },
+  "deccan": {
+    "file": "deccan.webp",
+    "alt": "Layered ridges above a misty valley at Mahabaleshwar",
+    "author": "Giriraj Navhal",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Valley_view_Mahabaleshwar.jpg"
+  },
+  "erra": {
+    "file": "erra.webp",
+    "alt": "Gullies in the red sediments at Erra Matti Dibbalu",
+    "author": "Adityamadhav83",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Erramatti_Dibbalu_(Red_Sand_Hills)_in_Visakhapatnam_01.JPG"
+  },
+  "sela": {
+    "file": "sela.webp",
+    "alt": "High mountain landscape at Sela Pass",
+    "author": "Kingshuk Mondal",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Landscape_as_seen_Sela_Pass,_Tawang_Dist,_Arunachal_Pradesh_1.jpg"
+  },
+  "majuli": {
+    "file": "majuli.webp",
+    "alt": "A fisher rowing on the Brahmaputra at Majuli",
+    "author": "Paramasha",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Brahmaputra_river_in_Majuli_Island.jpg"
+  },
+  "rajgir": {
+    "file": "rajgir.webp",
+    "alt": "Rajgir Hills above the road near Jarasandha’s Akhara",
+    "author": "LRBurdak",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:View_of_Rajgir_hills_from_Jarasandha%27s_Akhara.JPG"
+  },
+  "chitrakote": {
+    "file": "chitrakote.webp",
+    "alt": "The Indravati spilling over a broad ledge at Chitrakote Falls",
+    "author": "Drashokk",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Chitrakoot_Waterfalls.jpg"
+  },
+  "dudhsagar": {
+    "file": "dudhsagar.webp",
+    "alt": "Dudhsagar Falls flowing down a wooded slope above and below a railway bridge",
+    "author": "Mark Sheffield",
+    "license": "CC BY-SA 1.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/1.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Dudhsagar_Falls.jpg"
+  },
+  "dholavira": {
+    "file": "dholavira.webp",
+    "alt": "Excavated stone walls and steps of a water reservoir at Dholavira",
+    "author": "Bhajish Bharathan",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Water_reservoir_at_Dholavira_site.jpg"
+  },
+  "morni": {
+    "file": "morni.webp",
+    "alt": "A wooded hill above the grounds at Tikkar Taal in Haryana’s Morni Hills",
+    "author": "Manojkhurana",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Morni_Hills_and_Tikkar_Taal,_Haryana,_India_-_8.jpeg"
+  },
+  "spiti": {
+    "file": "spiti.webp",
+    "alt": "Bare slopes and the valley floor near Dhankar in Spiti",
+    "author": "Sarikaathavale",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Dhanker-Spiti_valley.jpg"
+  },
+  "hundru": {
+    "file": "hundru.webp",
+    "alt": "Hundru Falls dropping between rock faces into a boulder-lined pool",
+    "author": "Kingshuk Mondal",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Hundru_Falls,_Jharkhand,_India.jpg"
+  },
+  "loktak": {
+    "file": "loktak.webp",
+    "alt": "Floating mats of vegetation on Loktak Lake in Manipur",
+    "author": "Haoreima",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Floating_biomasses_(%22Phumdi%22_or_%22Phumthi%22_or_%22Phum%22_in_Classical_Meitei_language)_%26_islands_in_the_Loktak_Lake_(alias_%22Meitei_Sea%22)_-_World%27s_only_floating_lake_-_in_Kangleipak_(Manipur)_09.jpg"
+  },
+  "meghalayan": {
+    "file": "meghalayan.webp",
+    "alt": "A shaft of light reaching the stream inside Meghalaya’s Mawmluh Cave",
+    "author": "Wann Majaw",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:MawmluhCave1.jpg"
+  },
+  "reiek": {
+    "file": "reiek.webp",
+    "alt": "Traditional Mizo huts at the heritage village in Reiek",
+    "author": "अजीत कुमार तिवारी",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Mizo_village_in_Reiek.jpg"
+  },
+  "naga": {
+    "file": "naga.webp",
+    "alt": "Context photo: serpentinite from the Thetford Mines Ophiolite Complex in Quebec, Canada, not the Naga Hills",
+    "author": "James St. John",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Serpentinite_(Thetford_Mines_Ophiolite_Complex,_Ordovician;_Thetford_Mines_area,_Quebec,_Canada)_(16754387848).jpg",
+    "context": true
+  },
+  "chilika": {
+    "file": "chilika.webp",
+    "alt": "Boats moored along the shore of Chilika Lagoon",
+    "author": "Achyuta.das1",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Chilika_lake_3.jpg"
+  },
+  "harike": {
+    "file": "harike.webp",
+    "alt": "Harike Wetland in Punjab",
+    "author": "Jaypee",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Harike.jpg"
+  },
+  "keoladeo": {
+    "file": "keoladeo.webp",
+    "alt": "Shallow water and trees at Keoladeo National Park during migration season",
+    "author": "Nagarjun",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Wetlands_of_Keoladeo_National_Park.jpg"
+  },
+  "khangchendzonga": {
+    "file": "khangchendzonga.webp",
+    "alt": "A stream winding through green slopes in Khangchendzonga National Park",
+    "author": "G Devadarshan Sharma",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:A_scene_from_Kanchenjunga_National_Park,_Sikkim_(1).jpg"
+  },
+  "mahabalipuram": {
+    "file": "mahabalipuram.webp",
+    "alt": "The stone towers of the Shore Temple at Mamallapuram behind an open lawn",
+    "author": "Vyacheslav Argenberg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Mamallapuram,_Shore_Temple,_India.jpg"
+  },
+  "ramappa": {
+    "file": "ramappa.webp",
+    "alt": "The carved stone exterior of Ramappa Temple at Palampet",
+    "author": "Shivaranisiddula",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Ramappa_Temple_Palampet.jpg"
+  },
+  "unakoti": {
+    "file": "unakoti.webp",
+    "alt": "Large carved faces on the rock wall at Unakoti",
+    "author": "Shivam22383",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Gods_of_Unakoti.jpg"
+  },
+  "sarnath": {
+    "file": "sarnath.webp",
+    "alt": "Excavated brick monastery foundations in the Dhamek Stupa complex at Sarnath",
+    "author": "SpeakingArch",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Site_of_Dhamek_stupa_and_Monastery_Sarnath,_Varanasi_Uttar_Pradesh.jpg"
+  },
+  "nanda": {
+    "file": "nanda.webp",
+    "alt": "Wildflowers on the valley floor between steep slopes in Valley of Flowers National Park",
+    "author": "Rohit Sharma (original); UnpetitproleX (edit)",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Valley_of_flowers_national_park,_Uttarakhand,_India_03_(edit).jpg"
+  },
+  "sundarbans": {
+    "file": "sundarbans.webp",
+    "alt": "Mangrove forest lining a tidal channel in the Indian Sundarbans",
+    "author": "Kingshuk Mondal",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Dense_Mangrove_Forest_of_the_Sundarban_Tiger_Reserve_during_High_Tide,_West_Bengal,_India_03.jpg"
+  },
+  "baratang": {
+    "file": "baratang.webp",
+    "alt": "Mineral formations on the wall of a limestone cave at Baratang",
+    "author": "Pratiti090",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Limestone_Caves,_Baratang,_Andaman_01.jpg"
+  },
+  "rock-garden": {
+    "file": "rock-garden.webp",
+    "alt": "Visitors walking between stone walls at Nek Chand’s Rock Garden in Chandigarh",
+    "author": "Adam Jones from Kelowna, BC, Canada",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Scene_at_Nek_Chand_Fantasy_Rock_Garden_-_Chandigarh_U.T._-_India_-_02_(25901815083).jpg"
+  },
+  "naida": {
+    "file": "naida.webp",
+    "alt": "A passage through the rock at Naida Caves in Diu",
+    "author": "Edwin James",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Naida_Caves,_Diu.jpg"
+  },
+  "aravalli": {
+    "file": "aravalli.webp",
+    "alt": "Context photo: Malcha forest on Delhi’s Central Ridge, not the Aravalli Biodiversity Park",
+    "author": "Pinakpani",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Malcha_forest,_New_Delhi_01.jpg",
+    "context": true
+  },
+  "gurez": {
+    "file": "gurez.webp",
+    "alt": "The Kishanganga and the surrounding mountains in Gurez Valley",
+    "author": "Journo Mohsin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Gurez_Valley_04.jpg"
+  },
+  "lamayuru": {
+    "file": "lamayuru.webp",
+    "alt": "Eroded slopes in the Moonland landscape east of Lamayuru",
+    "author": "Fulvio Spada from Torino, Italy",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Moonland_landscape_east_of_Lamayuru_(10000116966).jpg"
+  },
+  "agatti": {
+    "file": "agatti.webp",
+    "alt": "Palms by the turquoise shallows of Agatti Island",
+    "author": "Asssagar",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Lakshadweep_-_Agatti_Islands.jpg"
+  },
+  "chunnambar": {
+    "file": "chunnambar.webp",
+    "alt": "Paradise Beach, where the Chunnambar backwaters meet the Bay of Bengal",
+    "author": "Vtbijoy",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Paradise_beach.jpg"
+  },
+  "malegaon-farm": {
+    "file": "malegaon-farm.webp",
+    "alt": "Context photo: rural landscape in the Baramati area, not the Malegaon Agricultural Farm",
+    "author": "Fredericknoronha",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Baramati,_Maharashtra,_India._21_rural_areas.jpg",
+    "context": true
+  },
+  "gandhi": {
+    "file": "gandhi.webp",
+    "alt": "Context photo: the municipal gateway in Adilabad, not Gandhi Park",
+    "author": "RATHOD SRAVAN",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Adilabad_Muncipality.jpg",
+    "context": true
+  },
+  "jainath": {
+    "file": "jainath.webp",
+    "alt": "Dark stone walls and red-trimmed steps at Jainath Temple",
+    "author": "RATHOD SRAVAN",
+    "license": "CC0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Laxmi_Narayana_temple.jpg"
+  },
+  "kala": {
+    "file": "kala.webp",
+    "alt": "Context photo: wooden crafts at a Nirmal handicraft shop in Telangana, not Kala Ashram",
+    "author": "Rajkumar6182",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Nirmal_Handicrafts_Shop.jpg",
+    "context": true
+  },
+  "pochera": {
+    "file": "pochera.webp",
+    "alt": "Pochera Waterfalls flowing over rock ledges",
+    "author": "Prabhavathi anaka",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Pochera_waterfall.jpg"
+  },
+  "kuntala": {
+    "file": "kuntala.webp",
+    "alt": "The first stream of Kuntala Waterfalls dropping down rock faces in Adilabad district",
+    "author": "Rajib Ghosh",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Stream_No._1_at_Kuntala_Waterfalls.JPG"
+  },
+  "nagoba": {
+    "file": "nagoba.webp",
+    "alt": "Nagoba Temple at Keslapur",
+    "author": "ఆన్ రాజ్ కుమార్",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Nagoba_Temple_Keslapur.jpg"
+  },
+  "gayatri": {
+    "file": "gayatri.webp",
+    "alt": "Context photo: wooded terrain and rock ledges at Kuntala Waterfall, not Gayatri Waterfalls",
+    "author": "Shivaranisiddula",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Kuntala_waterfall_3.jpg",
+    "context": true
+  },
+  "lalbagh": {
+    "file": "lalbagh.webp",
+    "alt": "Exposed Peninsular Gneiss at Lalbagh Botanical Garden in Bengaluru",
+    "author": "Ramyajagadish",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Gneiss_Rock.jpg"
+  },
+  "cubbon": {
+    "file": "cubbon.webp",
+    "alt": "The red façade of the Seshadri Iyer Memorial Library in Cubbon Park",
+    "author": "Augustus Binu / www.dreamsparrow.net / facebook",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Central_Library_@_Cubbon_Park.jpg"
+  },
+  "vismuseum": {
+    "file": "vismuseum.webp",
+    "alt": "Exterior of the Visvesvaraya Industrial and Technological Museum in Bengaluru",
+    "author": "Gpkp",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "source": "https://commons.wikimedia.org/wiki/File:Visvesvaraya_Industrial_and_Technological_Museum,_Bangalore_(2025)_01.jpg"
+  }
+}

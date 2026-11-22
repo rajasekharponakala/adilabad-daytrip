@@ -2,6 +2,8 @@
 
 A mobile-first geotourism atlas and one-day planner. Browse India by place, state or union territory, and theme; save ideas on the current device. In Adilabad and Bengaluru, enter a time window, choose a start point, mode and pace, and generate a round trip with buffered travel times. English UI with Telugu names for planning stops. No account or analytics; trip inputs remain on the device.
 
+The 3D Geo Lab is an on-demand set of educational models tied to three atlas entries. Explore a meteorite impact at Lonar, successive lava flows in the Deccan Traps, or the cooling joints of St. Mary’s Islands. The models are schematic, not measured terrain or numerical simulations. No API key, account, or external 3D service is required to use them.
+
 ## Run and verify
 
 Requires Node 22+ and npm. Browser tests use Chromium and exercise the production bundle at the GitHub Pages project subpath.
@@ -24,6 +26,7 @@ npm run test:browser
 - Before expanding coverage, field-check entrances, published hours, walking conditions, closure contacts and actual travel times. In particular, confirm an indoor day with Kala Ashram, and independently verify waterfall parking, walking approaches and access with local authorities. Do not publish the original conversation or recording in this repository.
 - The pilot conversation supplies the core product flow: one free day → indoor/outdoor and ranked interests → transport and preferences → timed routes with optional meals. Cycling, live closures, accommodations, bookings and multi-day trips are not offered yet.
 - Hero photograph: [Lonar Crater](https://commons.wikimedia.org/wiki/File:Lonar_Crater.jpg) by Akash Sharma, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/); resized to WebP and cropped by CSS. The photo derivative remains under the same license.
+- Atlas images ship locally as compressed WebP files. Each record in `src/place-photos.json` identifies the original file, creator, license and alt text. Click **Sources and visit notes** for credits. If an exact image is unavailable, a labelled context image must not present another location as the advertised stop. Image derivatives retain their listed original license; photo licenses are separate from the site code.
 
 ## GitHub Pages
 

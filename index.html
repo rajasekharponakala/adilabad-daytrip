@@ -11,7 +11,7 @@
     <a class="skip" href="#main">Skip to main content</a>
     <div class="topbar"><nav class="wrap nav" aria-label="Main">
       <a class="brand" href="#home"><span class="brandmark" aria-hidden="true">◈</span> Fieldday<span>India</span></a>
-      <div class="navlinks"><a href="#places">Explore the atlas</a><a class="nav-action" href="#planner">Plan a day <span aria-hidden="true">↗</span></a></div>
+      <div class="navlinks"><a href="#places">Explore the atlas</a><a href="#geo-lab">3D Lab</a><a class="nav-action" href="#planner">Plan a day <span aria-hidden="true">↗</span></a></div>
     </nav></div>
     <main id="main">
       <header class="wrap hero" id="home">
@@ -20,7 +20,7 @@
           <h1>The ground<br>has <em>stories.</em></h1>
           <p>Follow the rocks, rivers and landscapes that shape India, or turn a free day into a trip you can actually finish.</p>
           <p class="telugu hero-te" lang="te">ఒక రోజు. ఎన్నో కథలు.</p>
-          <div class="hero-actions"><a class="primary" href="#planner">Plan my day <span aria-hidden="true">↗</span></a><a class="secondary" href="#places">Explore India <span aria-hidden="true">↓</span></a></div>
+          <div class="hero-actions"><a class="primary" href="#planner">Plan my day <span aria-hidden="true">↗</span></a><a class="secondary" href="#places">Explore India <span aria-hidden="true">↓</span></a><a class="hero-lab-link" href="#geo-lab">Try the 3D lab ↘</a></div>
         </div>
         <figure class="hero-media">
           <img src="/src/media/lonar.webp" alt="The green rim of Lonar’s impact crater above the lake in Maharashtra" width="1400" height="1050" fetchpriority="high">
@@ -37,8 +37,14 @@
         </div>
         <p id="atlas-count" class="hint" role="status"></p><div id="catalog" class="cards"></div><button id="atlas-more" class="secondary show-more" type="button">Show more places ↓</button>
       </section>
+      <section class="lab-band" id="geo-lab" aria-labelledby="lab-title"><div class="wrap">
+        <div class="section-head"><div><p class="eyebrow">02 / THE 3D GEO LAB</p><h2 id="lab-title" tabindex="-1">See how landscapes form</h2><p>Turn the models, change stages, and see how an impact, repeated lava flows, and cooling rock shaped three places in the atlas.</p></div></div>
+        <div class="lab-launch" id="lab-launch"><button class="primary" type="button" id="load-lab">Open the 3D lab <span aria-hidden="true">↗</span></button><p>Runs on this device. These are simplified teaching models, not terrain surveys or physics forecasts.</p></div>
+        <p id="lab-status" class="hint" role="status"></p>
+        <div id="lab-mount"></div>
+      </div></section>
       <section class="planner-band" id="planner" aria-labelledby="planner-title"><div class="wrap">
-        <div class="section-head"><div><p class="eyebrow">02 / THE ONE-DAY PLANNER</p><h2 id="planner-title">One free day? Make it count.</h2><p>Pick how much time you have and what you love. We’ll fit stops and the trip back into your day.</p></div></div>
+        <div class="section-head"><div><p class="eyebrow">03 / THE ONE-DAY PLANNER</p><h2 id="planner-title">One free day? Make it count.</h2><p>Pick how much time you have and what you love. We’ll fit stops and the trip back into your day.</p></div></div>
         <div class="layout">
           <section class="panel planner-form" aria-labelledby="form-title">
             <p class="eyebrow">YOUR CHOICES</p><h3 id="form-title">Set up your trip</h3>
