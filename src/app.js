@@ -1,7 +1,9 @@
 import { hubs, interests, places, reviewed, starts } from './catalog.js';
-import { atlas, filterAtlas, regions } from './atlas.js';
+import { atlas, regions } from './atlas.js';
+import { accessLabels, atlasRecords, searchAtlas } from './atlas-search.js';
+import { layers } from './layer-definitions.js';
 import { adilabadToday, clock, minute, planTrip } from './planner.js';
-import { guideUrl,labModels } from './guide-links.js';
+import { labModels } from './guide-links.js';
 import photos from './place-photos.json';
 import './styles.css';
 
@@ -27,7 +29,9 @@ const markerLink = place => Object.assign(el('a','View place pin on OpenStreetMa
   href: `https://www.openstreetmap.org/?mlat=${place.lat}&mlon=${place.lon}#map=17/${place.lat}/${place.lon}`,
 });
 const rank = [], chips = new Map();
-let excluded = [];
+let excluded = [], built = false;
+const query = new URLSearchParams(location.search);
+let requestedStop = query.get('stop');
 for (const [id,name] of Object.entries(hubs)) form.elements.hub.append(Object.assign(el('option',name), {value:id}));
 function setHub(hub) {
   form.elements.hub.value = hub;
@@ -36,7 +40,13 @@ function setHub(hub) {
   $('confirmation-details').hidden = hub !== 'adilabad';
   stale();
 }
-form.elements.hub.addEventListener('change', () => setHub(form.elements.hub.value));
+form.elements.hub.addEventListener('change', () => {
+  setHub(form.elements.hub.value);
+  const url = new URL(location.href);
+  url.searchParams.set('hub',form.elements.hub.value);
+  history.replaceState(history.state,'',url);
+  renderPriority();
+});
 form.elements.date.value = form.elements.date.min = adilabadToday();
 for (const [id,name] of Object.entries(interests)) {
   const button = Object.assign(el('button',name,'chip'), {type:'button'});
@@ -68,9 +78,30 @@ for (const p of places) {
   box.append(fields);
   $('confirmations').append(box);
 }
-const query = new URLSearchParams(location.search);
 const initialHub = query.get('hub');
 setHub(Object.hasOwn(hubs,initialHub) ? initialHub : 'adilabad');
+function renderPriority() {
+  $('priority').hidden = requestedStop == null;
+  if (requestedStop == null) return;
+  const p = places.find(p => p.id === requestedStop);
+  $('priority-name').textContent = p?.name ?? 'Unrecognized stop';
+  $('priority-hint').textContent = !p ? 'This stop is not in the route planner.' :
+    p.access === 'discovery' ? 'Discovery only. This stop cannot be scheduled.' :
+    p.hub !== form.elements.hub.value ? `Choose the ${hubs[p.hub]} planning hub for this stop.` :
+    p.access === 'appointment' ? 'Needs confirmation: enter the times your host confirmed for this date.' :
+    'Every suggested route will include this stop. Your interests guide the other stops.';
+  if (p?.access === 'appointment' && p.hub === form.elements.hub.value) $('confirmation-details').open = true;
+}
+renderPriority();
+$('remove-priority').addEventListener('click', () => {
+  requestedStop = null;
+  const url = new URL(location.href);
+  url.searchParams.delete('stop');
+  history.replaceState(history.state,'',url);
+  renderPriority(); stale();
+  status.textContent = 'Priority removed. Build your itinerary to see matching stops.';
+  form.elements.hub.focus();
+});
 
 for (const [value,label] of [[atlas.length,'places to explore'],[regions.length,'states & territories'],[Object.keys(hubs).length,'planning hubs']]) {
   const item = el('div',null,'coverage-stat');
@@ -79,7 +110,7 @@ for (const [value,label] of [[atlas.length,'places to explore'],[regions.length,
 }
 for (const state of regions) $('atlas-state').append(Object.assign(el('option',state),{value:state}));
 const atlasThemes = new Map();
-const knownPlaces = new Set(atlas.map(p => p.id));
+const knownPlaces = new Set(atlasRecords.map(p => p.id));
 const symbols = { geology:'◈', nature:'≈', culture:'✷', heritage:'◇', science:'✧', birds:'⌁', farm:'✳' };
 let labModule, lab, chosenModel;
 async function openLab(model) {
@@ -115,11 +146,10 @@ function atlasCard(p) {
   card.id = `place-${p.id}`;
   card.tabIndex = -1;
   card.dataset.theme = p.tags[0];
-  const label = {candidate:'In the planner', appointment:'Needs confirmation', discovery:'Discovery only'}[p.access];
-  const flag = el('p',label,'flag');
+  const flag = el('p',accessLabels[p.access],'flag');
   flag.dataset.access = p.access;
   const artwork = el('div',null,'card-art');
-  const symbol = el('span',symbols[p.tags[0]],'card-symbol');
+  const symbol = el('span',layers[p.layer]?.icon ?? symbols[p.tags[0]],'card-symbol');
   symbol.setAttribute('aria-hidden','true');
   artwork.append(flag,symbol);
   const photo = photos[p.id];
@@ -132,12 +162,13 @@ function atlasCard(p) {
     image.src = `${new URL(import.meta.env.BASE_URL,document.baseURI).href}place-media/${photo.file}`;
   }
   const body = el('div',null,'card-body');
-  const eyebrow = el('p',p.state,'eyebrow');
+  const eyebrow = el('p',`${p.kind} · ${p.state}`,'eyebrow');
   const title = el('h3',p.name);
   body.append(eyebrow,title);
   if (p.te) body.append(teName(p));
   const tags = el('ul',null,'tag-list');
-  tags.append(...p.tags.map(t => el('li',interests[t])));
+  if (p.layer) tags.append(el('li',layers[p.layer].name));
+  else tags.append(...p.tags.map(t => el('li',interests[t])));
   const source = el('details',null,'source-details');
   source.append(el('summary','Sources and visit notes'),links(p));
   if (photo) {
@@ -148,17 +179,19 @@ function atlasCard(p) {
   }
   if (p.lat != null && p.access !== 'discovery') source.append(markerLink(p));
   const actions = el('div',null,'card-actions');
-  const guide = Object.assign(el('a','Read field guide ↗'),{href:`./${guideUrl(p.id)}`});
-  guide.setAttribute('aria-label',`Read field guide: ${p.name}`);
+  const action = p.layer ? 'Read heritage note' : 'Read field guide';
+  const guide = Object.assign(el('a',`${action} ↗`),{href:p.href});
+  guide.setAttribute('aria-label',`${action}: ${p.name}`);
   actions.append(guide);
-  const save = Object.assign(el('button',saved.has(p.id)?'Saved':'Save place','secondary'),{type:'button'});
-  const labelSave = () => save.setAttribute('aria-label',`${saved.has(p.id)?'Saved':'Save place'}: ${p.name}`);
+  const saveText = () => saved.has(p.id) ? 'Saved' : p.layer ? 'Save note' : 'Save place';
+  const save = Object.assign(el('button',saveText(),'secondary'),{type:'button'});
+  const labelSave = () => save.setAttribute('aria-label',`${saveText()}: ${p.name}`);
   labelSave();
   save.setAttribute('aria-pressed',String(saved.has(p.id)));
   save.addEventListener('click',() => {
     if (saved.has(p.id)) saved.delete(p.id); else saved.add(p.id);
     try { localStorage.setItem('fieldday-saved-v1', JSON.stringify([...saved])); } catch { /* Saves stay in this tab. */ }
-    save.textContent = saved.has(p.id) ? 'Saved' : 'Save place';
+    save.textContent = saveText();
     labelSave();
     save.setAttribute('aria-pressed',String(saved.has(p.id)));
     updateSaved();
@@ -171,26 +204,22 @@ function atlasCard(p) {
     modelLink.addEventListener('click',() => void openLab(p.id));
     actions.append(modelLink);
   }
-  if (p.hub && p.access !== 'discovery') {
-    const go = Object.assign(el('a','Open planner ↗'),{href:'#planner'});
-    go.addEventListener('click',() => setHub(p.hub));
-    actions.append(go);
-  }
+  if (p.plannerHref) actions.append(Object.assign(el('a','Open planner with this stop ↗'),{href:p.plannerHref}));
   body.append(el('p',p.area,'card-area'),el('p',p.note,'card-note'),tags,source,actions);
   card.append(artwork,body);
   return card;
 }
 function updateSaved() {
-  $('saved-only').textContent = `Saved places (${saved.size})`;
+  $('saved-only').textContent = `Saved items (${saved.size})`;
   $('saved-only').setAttribute('aria-pressed',String(savedOnly));
 }
 function renderAtlas() {
-  const filtered = filterAtlas({query:$('atlas-query').value,state:$('atlas-state').value,theme}).filter(p => !savedOnly || saved.has(p.id));
+  const filtered = searchAtlas({query:$('atlas-query').value,state:$('atlas-state').value,theme}).filter(p => !savedOnly || saved.has(p.id));
   const shown = filtered.slice(0,pageLimit);
-  $('atlas-count').textContent = `Showing ${shown.length} of ${filtered.length} ${savedOnly?'saved ':''}${filtered.length===1?'place':'places'}`;
+  $('atlas-count').textContent = `Showing ${shown.length} of ${filtered.length} ${savedOnly?'saved ':''}${filtered.length===1?'result':'results'}`;
   $('atlas-more').hidden = shown.length >= filtered.length;
   $('catalog').replaceChildren(...shown.map(atlasCard));
-  if (!filtered.length) $('catalog').append(el('p',savedOnly ? 'No saved places match. Turn off Saved places or clear your filters.' : 'No places match yet. Try another search or a broader filter.','atlas-empty'));
+  if (!filtered.length) $('catalog').append(el('p',savedOnly ? 'No saved items match. Turn off Saved items or clear your filters.' : 'No results. Try another search or a broader filter.','atlas-empty'));
   for (const [key,button] of atlasThemes) button.setAttribute('aria-pressed',String(theme===key));
   updateSaved();
 }
@@ -229,7 +258,8 @@ updatePresets();
 
 function stale() {
   $('empty-route').hidden = false;
-  if (!output.childElementCount) return;
+  if (!built) return;
+  built = false;
   output.replaceChildren();
   status.textContent = 'Trip details changed. Build your itinerary again.';
 }
@@ -267,6 +297,7 @@ function routeMap(plan) {
 }
 
 function generate(focus = true) {
+  built = true;
   const fields = new FormData(form);
   const confirmed = {};
   output.replaceChildren();
@@ -282,7 +313,7 @@ function generate(focus = true) {
     confirmed[p.id] = [open,close];
   }
   const result = planTrip({ origin:fields.get('origin'), date:fields.get('date'), from:fields.get('from'), until:fields.get('until'),
-    mode:fields.get('mode'), setting:fields.get('setting'), pace:fields.get('pace'), lunch:fields.has('lunch'), ranked:rank, confirmed, skip:excluded });
+    mode:fields.get('mode'), setting:fields.get('setting'), pace:fields.get('pace'), lunch:fields.has('lunch'), ranked:rank, confirmed, skip:excluded, stop:requestedStop });
   if (result.error) { status.textContent = result.error; return; }
   if (excluded.length) {
     const reset = Object.assign(el('button','Restore skipped stops','secondary'), {type:'button'});
@@ -290,6 +321,7 @@ function generate(focus = true) {
     output.append(reset);
   }
   if (!result.plans.length) {
+    if (result.requestedIssue) { status.textContent = result.requestedIssue; return; }
     status.textContent = 'No matching round trip fits these choices. Try a longer window, a different transport option, or fewer interests.';
     if (result.unavailable.length) output.append(el('p',`Needs a locally confirmed visit window: ${result.unavailable.join(', ')}.`,'hint'));
     if (rank.length) {
@@ -318,7 +350,7 @@ function generate(focus = true) {
       const skip = Object.assign(el('button','Skip stop & replan','secondary'), {type:'button'});
       skip.setAttribute('aria-label',`Skip stop & replan: ${s.place.name}`);
       skip.addEventListener('click', () => { excluded.push(s.place.id); generate(); });
-      li.append(el('h3',`${j+1}. ${s.place.name}`),teName(s.place),el('p',`${clock(s.begin)}–${clock(s.end)} · ${s.place.tags.map(t=>interests[t]).join(' / ')}`,'visit'),travel,el('p',s.place.note),markerLink(s.place),skip);
+      li.append(el('h3',`${j+1}. ${s.place.name}`),teName(s.place),el('p',`${clock(s.begin)}–${clock(s.end)} · ${s.place.tags.map(t=>interests[t]).join(' / ')}`,'visit'),travel,el('p',s.place.note),markerLink(s.place),s.place.id === requestedStop ? el('strong','Requested stop','flag') : skip);
       return [s.begin,li];
     });
     if (plan.lunch) entries.push([plan.lunch[0],el('li',`${clock(plan.lunch[0])}–${clock(plan.lunch[1])} · Lunch break (bring food or confirm a venue)`, 'break')]);

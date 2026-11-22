@@ -1,4 +1,4 @@
-import { interests, places, starts } from './catalog.js';
+import { hubs, interests, places, starts } from './catalog.js';
 import routes from './routes.json' with { type: 'json' };
 
 export function minute(text) {
@@ -29,6 +29,15 @@ export function planTrip(input, bundle = routes) {
   const easy = input.pace === 'easy';
   const distanceLimit = mode === 'foot' ? (easy ? 4000 : 7000) : Infinity;
   const candidates = [], unavailable = [];
+  const requested = places.find(p => p.id === input.stop);
+  const blocked = message => ({ plans: [], unavailable: [], requestedIssue: message });
+  if (input.stop != null) {
+    if (!requested) return blocked('This requested stop is not in the route planner. Remove the priority to plan other stops.');
+    if (requested.access === 'discovery') return blocked(`${requested.name} is discovery only. A round trip cannot be planned there.`);
+    if (requested.hub !== start.hub) return blocked(`${requested.name} is in the ${hubs[requested.hub]} planning hub. Change hubs or remove the priority.`);
+    if (skip.has(requested.id)) return blocked(`${requested.name} is marked to skip. Restore skipped stops or remove the priority.`);
+    if (input.setting !== 'any' && input.setting !== requested.setting) return blocked(`${requested.name} does not match your setting. Choose “Indoors or outdoors” to include it.`);
+  }
   const lunch = input.lunch && from <= 12*60+30 && until >= 14*60 ? [12*60+30, 13*60+10] : null;
   const leg = (a,b) => {
     const edge = data?.[`${a}:${b}`];
@@ -39,15 +48,25 @@ export function planTrip(input, bundle = routes) {
   for (const place of places) {
     if (place.hub !== start.hub || skip.has(place.id) || place.access === 'discovery' || (input.setting !== 'any' && input.setting !== place.setting)) continue;
     const weekday = parsed.getUTCDay();
-    if (place.closedDays?.includes(weekday) || (place.secondTuesday && weekday === 2 && parsed.getUTCDate() >= 8 && parsed.getUTCDate() <= 14)) continue;
-    const quality = ranked.length === 0 ? 2 : Math.max(0, ...place.tags.map(t => ranked.includes(t) ? 6 - ranked.indexOf(t)*2 : 0));
-    if (!quality) continue;
-    const win = (place.access === 'appointment' ? input.confirmed?.[place.id] : place.window)?.map(minute);
-    if (!win || !(win[1] > win[0])) {
-      if (place.access === 'appointment') unavailable.push(place.name);
+    if (place.closedDays?.includes(weekday) || (place.secondTuesday && weekday === 2 && parsed.getUTCDate() >= 8 && parsed.getUTCDate() <= 14)) {
+      if (place === requested) return blocked(`${place.name} is listed as closed on this date. Choose another trip date.`);
       continue;
     }
-    if (!leg(start.id, place.id) || !leg(place.id, start.id)) continue;
+    const quality = ranked.length === 0 ? 2 : Math.max(0, ...place.tags.map(t => ranked.includes(t) ? 6 - ranked.indexOf(t)*2 : 0));
+    if (!quality && place !== requested) continue;
+    const times = place.access === 'appointment' ? input.confirmed?.[place.id] : place.window;
+    const win = Array.isArray(times) && times.map(minute);
+    if (!win || !(win[1] > win[0])) {
+      if (place.access === 'appointment') {
+        if (place === requested) return blocked(`${place.name} needs local confirmation. Ask the host for a visit window on this date, then enter both confirmed times and rebuild.`);
+        unavailable.push(place.name);
+      }
+      continue;
+    }
+    if (!leg(start.id, place.id) || !leg(place.id, start.id)) {
+      if (place === requested) return blocked(`There is no mapped round trip to ${place.name} from this starting point by the selected transport. Try another start or transport.`);
+      continue;
+    }
     candidates.push({ place, win, quality });
   }
   const scored = [];
@@ -55,7 +74,7 @@ export function planTrip(input, bundle = routes) {
     return lunch && at < lunch[1] && at + duration > lunch[0] ? lunch[1] : at;
   }
   function visit(previous, now, stops, metres, travel, score) {
-    if (stops.length) {
+    if (stops.length && (!requested || stops.some(s => s.place === requested))) {
       const back = leg(previous, start.id);
       if (back) {
         const depart = avoidLunch(now, back.time);
@@ -81,6 +100,10 @@ export function planTrip(input, bundle = routes) {
     }
   }
   visit(start.id, from, [], 0, 0, 0);
+  if (requested && !scored.length) {
+    const times = requested.access === 'appointment' ? input.confirmed[requested.id] : requested.window;
+    return blocked(`${requested.name} doesn't fit this round trip. The ${requested.minutes}-minute visit must fit between ${times[0]} and ${times[1]} IST, with time to return by ${input.until}. ${mode === 'foot' ? `The total walk must also be within ${distanceLimit/1000} km. Try a car or adjust your times.` : 'Try adjusting your start or return time.'}`);
+  }
   scored.sort((a,b) => b.score - a.score || a.back.end - b.back.end);
   const key = plan => plan.stops.map(s => s.place.id).sort().join(',');
   const best = scored[0], alt = best && scored.find(p => key(p) !== key(best));

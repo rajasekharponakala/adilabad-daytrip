@@ -1,11 +1,13 @@
 import { layers } from '../src/layer-definitions.js';
 import { atlas, regions } from '../src/atlas.js';
-import { earthEntries } from '../src/layers-earth.js';
-import { peopleEntries } from '../src/layers-people.js';
+import { entries } from '../src/layer-records.js';
+import {regionReviews} from '../src/region-reviews.js';
+import {reviewCell,validateReviewLog} from '../src/coverage.js';
 
-export const entries = [...earthEntries,...peopleEntries];
+export { entries };
 const sites = new Map(atlas.map(p=>[p.id,p]));
 export function validateLayers(records = entries) {
+  validateReviewLog(regionReviews,regions);
   const ids=new Set(), counts=Object.fromEntries(Object.keys(layers).map(id=>[id,0]));
   for(const {id,name,state,area,layer,summary,sources,placeId} of records) {
     if(typeof id!=='string'||!/^[a-z0-9-]+$/.test(id)||ids.has(id)||!Object.hasOwn(layers,layer)||![name,state,area,summary].every(s=>typeof s==='string'&&s.trim())||
@@ -21,11 +23,12 @@ export function renderLayerPage({id,layout,anchor,escape}) {
   const links=Object.entries(layers).map(([key,layer])=>`<li>${anchor(root+`layers/${key}/`,`${layer.name} (${entries.filter(p=>p.layer===key).length})`)}</li>`).join('');
   const directory=`<nav class="layer-nav" aria-label="Heritage layers"><ul class="tags">${links}</ul></nav>`;
   const context='<p class="status">Discovery only · not an itinerary or access guarantee</p>';
-  const coverage=()=>`<section><h2>Coverage by state and union territory</h2><p>Counts are published notes, not known sites. A zero flags an editorial gap; it does not mean a region lacks that heritage.</p><div class="coverage-scroll" role="region" aria-label="Coverage table" tabindex="0"><table><caption>Published layer notes by region</caption><thead><tr><th scope="col">Region</th>${Object.values(layers).map(l=>`<th scope="col">${escape(l.name)}</th>`).join('')}</tr></thead><tbody>${regions.map(region=>`<tr><th scope="row">${escape(region)}</th>${Object.keys(layers).map(key=>`<td>${entries.filter(p=>p.state===region&&p.layer===key).length}</td>`).join('')}</tr>`).join('')}</tbody></table></div></section>`;
+  const coverage=()=>`<section><h2>Coverage by state and union territory</h2><p>Counts refer to published notes. “Reviewed; no published note” means sources were checked for that theme. A dash means no published note or recorded review. Neither means the heritage is absent.</p><p><a href="#regional-reviews">Read the dated regional source reviews ↓</a></p><div class="coverage-scroll" role="region" aria-label="Coverage table" tabindex="0"><table><caption>Published layer notes by region</caption><thead><tr><th scope="col">Region</th>${Object.values(layers).map(l=>`<th scope="col">${escape(l.name)}</th>`).join('')}</tr></thead><tbody>${regions.map(region=>`<tr><th scope="row">${escape(region)}</th>${Object.keys(layers).map(key=>{const cell=reviewCell(region,key,entries,regionReviews);return `<td>${cell.notes.length?anchor(`${key}/#${cell.notes[0].id}`,String(cell.notes.length)):cell.checked.length?escape(cell.status):'<span aria-label="No recorded review">—</span>'}</td>`;}).join('')}</tr>`).join('')}</tbody></table></div></section>
+    <section id="regional-reviews"><h2>Regional source reviews</h2><p>This batch checked ${regionReviews.length} regions that previously had no layer notes. Expand a region for its scope, evidence and next step.</p>${regionReviews.map(r=>`<details class="review-item"><summary>${escape(r.state)}</summary><p><time datetime="${escape(r.date)}">${escape(r.date)}</time> · ${r.layers.map(l=>escape(layers[l].name)).join(', ')}</p><p>${escape(r.outcome)}</p><p><strong>Next:</strong> ${escape(r.next)}</p><ul>${r.sources.map(([label,url])=>`<li>${anchor(url,label)}</li>`).join('')}</ul></details>`).join('')}</section>`;
   if(!id) return layout({root,title:'Heritage layers',description:'Eight ways to read India’s landscapes and heritage.',inner:`
     <nav class="crumb" aria-label="Breadcrumb">${anchor('../#places','India atlas')} / Heritage layers</nav>
     <h1>Explore heritage layers</h1><p class="intro">Choose a way to read the landscape: rocks, early human evidence, history, habitats, living cultures, food, the observed sky, or calendar traditions.</p>
-    <p>${entries.length} sourced discovery notes across ${Object.keys(layers).length} layers. This is a growing editorial collection, not a census of every site.</p>${context}
+    <p>${entries.length} sourced discovery notes across ${Object.keys(layers).length} layers, representing ${new Set(entries.map(e=>e.state)).size} states and union territories. Search by topic or name in the ${anchor('../#places','main atlas')}. Coverage varies by theme and district.</p>${context}
     <div class="directory layer-grid">${Object.entries(layers).map(([key,layer])=>`<section><p class="kicker" aria-hidden="true">${layer.icon}</p><h2>${anchor(`${key}/`,layer.name)}</h2><p>${escape(layer.description)}</p></section>`).join('')}</div>${coverage()}`});
   const layer=layers[id];
   const selected=entries.filter(p=>p.layer===id).sort((a,b)=>a.state.localeCompare(b.state,'en-IN')||a.name.localeCompare(b.name,'en-IN'));

@@ -30,12 +30,12 @@
       </header>
       <div class="coverage"><div class="wrap coverage-inner"><strong>A field guide for curious days.</strong><div id="coverage" aria-label="Atlas coverage"></div></div></div>
       <section class="wrap places" id="places" aria-labelledby="places-title">
-        <div class="section-head"><div><p class="eyebrow">01 / THE INDIA ATLAS</p><h2 id="places-title">Explore by curiosity</h2><p>Find a place, then see why its landscape matters. Atlas listings are for discovery unless included in a planning hub. <a href="./places/">Browse all field guides ↗</a> · <a href="./layers/">Explore the eight heritage layers ↗</a></p></div><span class="stamp" aria-hidden="true">LOOK<br>CLOSER ↘</span></div>
+        <div class="section-head"><div><p class="eyebrow">01 / THE INDIA ATLAS</p><h2 id="places-title">Explore by curiosity</h2><p>Search field guides, planner stops and heritage notes together. Only cards with an “Open planner” link can become stops. Cultural references describe traditions, not invitations to visit.</p><p><a href="./places/">Browse all field guides ↗</a> · <a href="./layers/">Explore the eight heritage layers ↗</a></p></div><span class="stamp" aria-hidden="true">LOOK<br>CLOSER ↘</span></div>
         <div class="atlas-tools">
-          <div class="twocol"><label>Search places<input id="atlas-query" type="search" autocomplete="off" placeholder="Try crater, Chilika or Karnataka"></label><label>State or union territory<select id="atlas-state"><option value="">All states and territories</option></select></label></div>
-          <div class="atlas-actions"><div class="chips" id="atlas-themes" role="group" aria-label="Atlas themes"></div><button class="secondary" id="saved-only" type="button" aria-pressed="false">Saved places</button></div>
+          <div class="twocol"><label>Search the atlas<input id="atlas-query" type="search" autocomplete="off" placeholder="Try Ugadi, crater or Bengaluru"></label><label>State or union territory<select id="atlas-state"><option value="">All states and territories</option></select></label></div>
+          <div class="atlas-actions"><div class="chips" id="atlas-themes" role="group" aria-label="Atlas themes"></div><button class="secondary" id="saved-only" type="button" aria-pressed="false">Saved items</button></div>
         </div>
-        <p id="atlas-count" class="hint" role="status"></p><div id="catalog" class="cards"></div><button id="atlas-more" class="secondary show-more" type="button">Show more places ↓</button>
+        <p id="atlas-count" class="hint" role="status"></p><div id="catalog" class="cards"></div><button id="atlas-more" class="secondary show-more" type="button">Show more results ↓</button>
       </section>
       <section class="lab-band" id="geo-lab" aria-labelledby="lab-title"><div class="wrap">
         <div class="section-head"><div><p class="eyebrow">02 / THE 3D GEO LAB</p><h2 id="lab-title" tabindex="-1">See how landscapes form</h2><p>Turn seven models and compare three stages in each. Explore impacts, lava, coastal erosion, caves, shifting river islands, and ancient water engineering.</p></div></div>
@@ -49,6 +49,7 @@
           <section class="panel planner-form" aria-labelledby="form-title">
             <p class="eyebrow">YOUR CHOICES</p><h3 id="form-title">Set up your trip</h3>
             <form id="trip">
+              <fieldset id="priority" hidden><legend>Requested stop</legend><strong id="priority-name"></strong><p class="hint" id="priority-hint"></p><button type="button" class="secondary" id="remove-priority">Remove priority</button></fieldset>
               <div class="twocol"><label>Planning hub<select name="hub" required></select></label><label>Start and return point<select name="origin" required></select></label></div>
               <div class="timegrid">
                 <label>Trip date<input type="date" name="date" required></label>

@@ -21,6 +21,8 @@ npm run test:browser
 
 ## Data and limitations
 
+The main atlas brings place guides and regional heritage notes into one search. The [heritage coverage table](https://rajasekharponakala.github.io/adilabad-daytrip/layers/#regional-reviews) includes dated regional checks with sources, findings and unresolved questions. For research context see the [competitive review](docs/competitive-review.md), [hands-on traveller benchmark](docs/traveller-benchmark.md), and [nationwide source roadmap](docs/data-source-roadmap.md).
+
 - 48 editorial records covering all 28 states and 8 union territories, with per-place sources in `src/atlas.js` and `src/catalog.js`. A geotourism lens connects landforms to wildlife, architecture, archaeology, museums and farming. Discovery records are not route stops. UNESCO Tentative List citations do not imply World Heritage inscription.
 - The two routing hubs have six eligible stops, including Kala Ashram, which requires a date-specific local confirmation. Adilabad’s two other visits use provisional planning windows. Bengaluru uses conservative windows and excludes Cubbon Park on published closure days. Verify site notices before travel. There are no live weather, closure, entry fee or step-free guarantees. Walking distances refer to travel between mapped stops, not walking inside attractions.
 - `src/routes.json` holds directed estimates from [FOSSGIS OSRM](https://routing.openstreetmap.de/) based on [OpenStreetMap](https://www.openstreetmap.org/copyright) data (ODbL 1.0). It includes distances, simplified geometries and coordinate snap distances. The schematic is not turn-by-turn navigation. Pochera stayed discovery-only after the closest mapped car endpoint snapped about 810 m away from the falls pin.

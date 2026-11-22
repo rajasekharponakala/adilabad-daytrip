@@ -6,7 +6,7 @@ test('production assets work under the GitHub Pages project path', async ({page}
   page.on('pageerror', e=>errors.push(e.message));
   await page.goto('./');
   await expect(page.locator('#catalog article')).toHaveCount(6);
-  await expect(page.locator('#atlas-count')).toContainText('of 48 places');
+  await expect(page.locator('#atlas-count')).toContainText(/Showing 6 of \d+ results/);
   await page.getByRole('button',{name:'Build my itinerary'}).click();
   await expect(page.locator('#output')).toContainText('2 stops');
   await expect(page.getByRole('img',{name:/Schematic/})).toBeVisible();
@@ -44,7 +44,7 @@ test('mobile: indoor confirmation is date-bound and changed inputs invalidate ou
 
 test('atlas filters combine and saved places persist, without scheduling discovery sites', async ({page}) => {
   await page.goto('./');
-  await page.getByRole('button',{name:'Show more places'}).click();
+  await page.getByRole('button',{name:'Show more results'}).click();
   await expect(page.locator('#catalog article')).toHaveCount(12);
   await page.getByLabel('State or union territory').selectOption('Odisha');
   await page.getByRole('group',{name:'Atlas themes'}).getByRole('button',{name:'Birding & wildlife'}).click();
@@ -53,7 +53,7 @@ test('atlas filters combine and saved places persist, without scheduling discove
   await expect(card.getByRole('link',{name:'Open planner'})).toHaveCount(0);
   await card.getByRole('button',{name:'Save place: Chilika Lagoon'}).click();
   await page.reload();
-  await page.getByRole('button',{name:'Saved places (1)'}).click();
+  await page.getByRole('button',{name:'Saved items (1)'}).click();
   await expect(card).toBeVisible();
   await page.getByRole('link',{name:'Explore Lonar Crater in the atlas'}).click();
   await expect(page.locator('#place-lonar')).toBeFocused();

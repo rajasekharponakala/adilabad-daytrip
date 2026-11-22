@@ -1,0 +1,105 @@
+// Site-specific discovery notes. The related atlas guide may cover a wider area.
+export const regionalEntries = [
+  {
+    id: 'regional-baratang', name: 'Baratang limestone caves', state: 'Andaman and Nicobar Islands', area: 'Baratang Island',
+    layer: 'geology', placeId: 'baratang',
+    summary: 'Water can both hollow out a limestone cave and build new stone inside it. As it seeps through cracks it dissolves limestone; as it drips into the cave it can leave mineral deposits hanging from the roof or rising from the floor. Baratang has both forms.',
+    sources: [['India’s UNESCO Tentative List submission · Baratang karst complex', 'https://whc.unesco.org/en/tentativelists/7052/']],
+  },
+  {
+    id: 'regional-sela', name: 'Sela Pass and Sela Lake', state: 'Arunachal Pradesh', area: 'Tawang–West Kameng',
+    layer: 'geology', placeId: 'sela',
+    summary: 'Sela is a crossing between mountain ridges, high enough that the nearby lake often freezes in winter. A pass is low relative to the peaks on either side; this one still stands more than 4,000 metres above sea level.',
+    sources: [['Incredible India · Sela Pass', 'https://www.incredibleindia.gov.in/en/arunachal-pradesh/tawang/sela-pass']],
+  },
+  {
+    id: 'regional-rajgir-stupa', name: 'Vishwa Shanti Stupa at Rajgir', state: 'Bihar', area: 'Ratnagiri Hill, Nalanda district',
+    layer: 'history', placeId: 'rajgir',
+    summary: 'Buddha figures face the four directions on the white stupa atop Ratnagiri Hill. The monument belongs to the international peace pagoda movement of Nipponzan Myohoji, a modern chapter in the Buddhist history of Rajgir.',
+    sources: [['Bihar Tourism · Ready Reckoner, p. 24', 'https://tourism.bihar.gov.in/content/dam/bihar-tourism/e_brochures/ready-reckoner-22.pdf']],
+  },
+  {
+    id: 'regional-rock-garden', name: 'Nek Chand’s Rock Garden', state: 'Chandigarh', area: 'Sector 1',
+    layer: 'history', placeId: 'rock-garden',
+    summary: 'Nek Chand began the garden in 1957. Broken bangles, pots and tiles became the surfaces of sculpted figures; the chambers around them form an imagined kingdom. The materials tell a story of reuse that the name “Rock Garden” alone can obscure.',
+    sources: [['Chandigarh Tourism · Rock Garden', 'https://chandigarhtourism.gov.in/pages/page/rock-garden']],
+  },
+  {
+    id: 'regional-chitrakote', name: 'Chitrakote’s horseshoe falls', state: 'Chhattisgarh', area: 'Indravati River, Bastar district',
+    layer: 'geology', placeId: 'chitrakote',
+    summary: 'The Indravati drops over a curved line of rock ledges. Monsoon water spreads across the broad rim; at lower flows, gaps open in the curtain of water and individual streams reveal more of the ledges beneath.',
+    sources: [['Incredible India · Chitrakote Waterfalls', 'https://www.incredibleindia.gov.in/en/chhattisgarh/jagdalpur/chitrakote-waterfalls']],
+  },
+  {
+    id: 'regional-naida', name: 'Cut steps at Naida Caves', state: 'Dadra and Nagar Haveli and Daman and Diu', area: 'Diu, outside the fort walls',
+    layer: 'history', placeId: 'naida',
+    summary: 'Square-cut steps in the network of passages show how people reshaped the rock. The administration records a belief that the Portuguese took building stone from here for Diu Fort; the steps are clearer evidence of stoneworking than of where the stone went.',
+    sources: [['Union territory administration · Naida Caves', 'https://ddd.gov.in/places-centres/naida-caves/']],
+  },
+  {
+    id: 'regional-aravalli', name: 'Reused clay pits at Aravalli Biodiversity Park', state: 'Delhi', area: 'South Central Ridge, near Vasant Vihar',
+    layer: 'biosphere', placeId: 'aravalli',
+    summary: 'Former clay pits are part of the park’s restoration story. Several now house plant collections, including ferns and orchids. These deliberately managed pockets sit alongside recreated forest and seasonal water bodies on the Ridge.',
+    sources: [['Delhi Tourism · Aravalli Biodiversity Park', 'https://delhitourism.gov.in/dt/biodiversity_parks/aravalli_biodiversity_park.html']],
+  },
+  {
+    id: 'regional-dudhsagar', name: 'The four tiers of Dudhsagar', state: 'Goa', area: 'Bhagwan Mahavir Sanctuary area',
+    layer: 'geology', placeId: 'dudhsagar',
+    summary: 'Dudhsagar descends in four tiers, so its total height of about 310 metres is spread over several drops. The foamy white water gives the falls their name, meaning “sea of milk.”',
+    sources: [['Goa Tourism Development Corporation · Dudhsagar Falls', 'https://goa-tourism.com/water-bodies/dudhsagar-falls/']],
+  },
+  {
+    id: 'regional-morni', name: 'Twin lakes at Tikkar Tal', state: 'Haryana', area: 'Morni Hills, Panchkula district',
+    layer: 'geology', placeId: 'morni',
+    summary: 'A hillock separates two lakes in the lower Shivalik range. Haryana Tourism describes the water levels as matching. That observation alone does not establish whether an underground channel connects the lakes.',
+    sources: [['Haryana Tourism · Morni and Tikkar Tal', 'https://haryanatourism.gov.in/places_of_interest/morni-and-tikkar-tal/']],
+  },
+  {
+    id: 'regional-dhankar', name: 'Dhankar citadel', state: 'Himachal Pradesh', area: 'Spiti Valley, downstream of Kaza',
+    layer: 'history', placeId: 'spiti',
+    summary: 'The citadel occupies a spur jutting into the Spiti Valley above the river. The district account explains why this position mattered: people could watch the approaches and use signal fires to warn surrounding settlements.',
+    sources: [['Lahaul and Spiti district · Dhankar', 'https://hplahaulspiti.nic.in/tourist-places-in-spiti/']],
+  },
+  {
+    id: 'regional-hundru', name: 'Erosion at Hundru Falls', state: 'Jharkhand', area: 'Subarnarekha River, near Ranchi',
+    layer: 'geology', placeId: 'hundru',
+    summary: 'The Subarnarekha drops about 98 metres at Hundru. The exposed rock below the drop records a slower process than the falling water itself: repeated scouring wears the rock into different shapes.',
+    sources: [['Government of Jharkhand · Hundru Falls', 'https://www.jharkhand.gov.in/home/AboutTourism']],
+  },
+  {
+    id: 'regional-agatti', name: 'Agatti reef and lagoon', state: 'Lakshadweep', area: 'Agatti Island',
+    layer: 'biosphere', placeId: 'agatti',
+    summary: 'At Agatti the lagoon covers a much larger area than the island itself. The reef breaks the force of waves from the open sea. The more sheltered water is home to corals and reef fish, part of the island environment that a map of land alone would miss.',
+    sources: [['Lakshadweep Administration · Agatti island profile', 'https://lakshadweep.gov.in/islands/agatti/']],
+  },
+  {
+    id: 'regional-reiek', name: 'Community-protected forest at Reiek', state: 'Mizoram', area: 'Reiek, Mamit district',
+    layer: 'biosphere', placeId: 'reiek',
+    summary: 'Forests surround the village on Reiek Mountain. Incredible India credits the local youth organisation with protecting them through rules against tree felling, hunting and littering. The wooded slopes reflect ongoing local stewardship.',
+    sources: [['Incredible India · Reiek rural tourism profile', 'https://www.incredibleindia.gov.in/en/rural-tourism/reiek']],
+  },
+  {
+    id: 'regional-chunnambar', name: 'Chunnambar backwaters and river mouth', state: 'Puducherry', area: 'South of Puducherry city',
+    layer: 'geology', placeId: 'chunnambar',
+    summary: 'Near the mouth of the Chunnambar River, the backwaters lie beside the sandy shore of Paradise Beach. The setting brings two landscapes together: sheltered inland water and a beach exposed to waves from the Bay of Bengal.',
+    sources: [['Incredible India · Chunnambar Boat House', 'https://www.incredibleindia.gov.in/en/puducherry/puducherry/chunnambar-boat-house']],
+  },
+  {
+    id: 'regional-harike', name: 'Harike Lake and migratory waterbirds', state: 'Punjab', area: 'Beas–Sutlej confluence',
+    layer: 'biosphere', placeId: 'harike',
+    summary: 'Harike is a shallow reservoir with islands and floating vegetation. The Ramsar record identifies it as both a wintering site and a staging site: some waterbirds spend the season here, while others use the lake as a stop on a longer migration.',
+    sources: [['Ramsar Sites Information Service · Harike Lake (1990 record)', 'https://rsis.ramsar.org/ris/462']],
+  },
+  {
+    id: 'regional-khangchendzonga', name: 'Vegetation belts of Khangchendzonga', state: 'Sikkim', area: 'Khangchendzonga National Park',
+    layer: 'biosphere', placeId: 'khangchendzonga',
+    summary: 'The park rises through more than seven kilometres of elevation. Broadleaf forest on lower slopes gives way to conifer forest, rhododendron scrub and alpine meadows higher up. The boundaries vary with slope and exposure as well as altitude.',
+    sources: [['Wildlife Institute of India · Khangchendzonga National Park', 'https://c2c.wii.gov.in/khangchendzonga-national-park']],
+  },
+  {
+    id: 'regional-unakoti', name: 'Unakoti’s rock-cut Shiva head', state: 'Tripura', area: 'Near Kailashahar, Unakoti district',
+    layer: 'history', placeId: 'unakoti',
+    summary: 'The central Shiva head, Unakotiswara Kal Bhairava, rises about nine metres including its headdress. At this Shaivite pilgrimage site, the district distinguishes figures carved into the hillside itself from separate stone images.',
+    sources: [['Unakoti district · Unakoti Heritage Site', 'https://unakoti.nic.in/tourist-place/unakoti-heritage-site/']],
+  },
+];
