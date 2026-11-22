@@ -3,61 +3,79 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#17362c">
-    <meta name="description" content="Plan one realistic day around Adilabad, Telangana: nature, geology, art and heritage.">
-    <title>Adilabad Daytrip · One free day</title>
+    <meta name="theme-color" content="#f8f4e9">
+    <meta name="description" content="Explore India's rocks, landscapes, and heritage. Plan one realistic day out in Adilabad or Bengaluru.">
+    <title>Fieldday India — The ground has stories</title>
   </head>
   <body>
-    <a class="skip" href="#planner">Skip to planner</a>
-    <header class="hero">
-      <nav class="wrap nav" aria-label="Main"><a class="brand" href="#top">◈ &nbsp; Adilabad Daytrip</a><a href="#places">Explore places ↗</a></nav>
-      <div class="wrap intro" id="top">
-        <p class="eyebrow">TELANGANA &nbsp;/&nbsp; FIELD NOTES &nbsp;/&nbsp; PILOT 01</p>
-        <h1>One free day<br><em>in Adilabad.</em></h1>
-        <p>From stone inscriptions to rocky cascades, find a day out that fits your interests and gets you back on time.</p>
-        <p class="telugu" lang="te">మీ ఆసక్తులకు తగ్గట్టుగా ఆదిలాబాద్‌లో ఒక రోజు.</p>
-      </div>
-    </header>
-    <main class="wrap" id="planner">
-      <div class="layout">
-        <section class="panel" aria-labelledby="form-title">
-          <p class="eyebrow">01 / TRIP DETAILS</p><h2 id="form-title">Make it your day</h2>
-          <form id="trip">
-            <label>Start and return point<select name="origin" required></select></label>
-            <div class="timegrid">
-              <label>Trip date<input type="date" name="date" required></label>
-              <label>Start (IST)<input type="time" name="from" value="09:00" required></label>
-              <label>Return by (IST)<input type="time" name="until" value="17:00" required></label>
-            </div>
-            <div class="twocol">
-              <label>Getting around<select name="mode"><option value="car">Taxi or private car</option><option value="foot">On foot (up to 7 km)</option></select></label>
-              <label>Setting<select name="setting"><option value="any">Indoors or outdoors</option><option value="outdoor">Outdoors</option><option value="indoor">Indoors only</option></select></label>
-            </div>
-            <fieldset><legend>Rank your interests <small>(optional)</small></legend>
-              <div class="chips" id="interests"></div><p class="hint" id="rank" aria-live="polite">Pick up to three, in order. No choices means an open mix.</p>
-            </fieldset>
-            <label class="check"><input type="checkbox" name="lunch" checked> Leave a 40-minute lunch break if the route spans lunchtime</label>
-            <details><summary>Add a locally confirmed stop</summary>
-              <p class="hint">Use only if the host or site authority confirmed public access for your trip date. These times are not supplied by this app.</p>
-              <div id="confirmations"></div>
-            </details>
-            <button type="submit" class="primary">Build my itinerary <span aria-hidden="true">→</span></button>
-          </form>
-        </section>
-        <section class="panel results" id="results" aria-labelledby="result-title" tabindex="-1">
-          <p class="eyebrow">02 / YOUR ROUTE</p><h2 id="result-title">Your day plan</h2>
-          <p id="status" role="status" aria-live="polite">Choose your trip details to see a route and timeline.</p>
-          <div id="output"></div>
-        </section>
-      </div>
-      <section id="places" class="places" aria-labelledby="places-title">
-        <p class="eyebrow">03 / FIELD GUIDE</p><h2 id="places-title">Explore the pilot area</h2>
-        <p>Places researched from published sources. Discovery listings are not added to the itinerary.</p>
-        <div id="catalog" class="cards"></div>
+    <a class="skip" href="#main">Skip to main content</a>
+    <div class="topbar"><nav class="wrap nav" aria-label="Main">
+      <a class="brand" href="#home"><span class="brandmark" aria-hidden="true">◈</span> Fieldday<span>India</span></a>
+      <div class="navlinks"><a href="#places">Explore the atlas</a><a class="nav-action" href="#planner">Plan a day <span aria-hidden="true">↗</span></a></div>
+    </nav></div>
+    <main id="main">
+      <header class="wrap hero" id="home">
+        <div class="intro">
+          <p class="eyebrow kicker"><span aria-hidden="true">◆</span> INDIA, OUTSIDE THE GUIDEBOOK</p>
+          <h1>The ground<br>has <em>stories.</em></h1>
+          <p>Follow the rocks, rivers and landscapes that shape India, or turn a free day into a trip you can actually finish.</p>
+          <p class="telugu hero-te" lang="te">ఒక రోజు. ఎన్నో కథలు.</p>
+          <div class="hero-actions"><a class="primary" href="#planner">Plan my day <span aria-hidden="true">↗</span></a><a class="secondary" href="#places">Explore India <span aria-hidden="true">↓</span></a></div>
+        </div>
+        <figure class="hero-media">
+          <img src="/src/media/lonar.webp" alt="The green rim of Lonar’s impact crater above the lake in Maharashtra" width="1400" height="1050" fetchpriority="high">
+          <span class="hero-badge">FIELD NOTE / 01</span>
+          <figcaption><div><strong>Lonar Crater</strong><span>Maharashtra · meteorite impact</span></div><a href="#place-lonar" id="lonar-link" aria-label="Explore Lonar Crater in the atlas">↗</a></figcaption>
+        </figure>
+      </header>
+      <div class="coverage"><div class="wrap coverage-inner"><strong>A field guide for curious days.</strong><div id="coverage" aria-label="Atlas coverage"></div></div></div>
+      <section class="wrap places" id="places" aria-labelledby="places-title">
+        <div class="section-head"><div><p class="eyebrow">01 / THE INDIA ATLAS</p><h2 id="places-title">Explore by curiosity</h2><p>Find a place, then see why its landscape matters. Atlas listings are for discovery unless included in a planning hub.</p></div><span class="stamp" aria-hidden="true">LOOK<br>CLOSER ↘</span></div>
+        <div class="atlas-tools">
+          <div class="twocol"><label>Search places<input id="atlas-query" type="search" autocomplete="off" placeholder="Try crater, Chilika or Karnataka"></label><label>State or union territory<select id="atlas-state"><option value="">All states and territories</option></select></label></div>
+          <div class="atlas-actions"><div class="chips" id="atlas-themes" role="group" aria-label="Atlas themes"></div><button class="secondary" id="saved-only" type="button" aria-pressed="false">Saved places</button></div>
+        </div>
+        <p id="atlas-count" class="hint" role="status"></p><div id="catalog" class="cards"></div><button id="atlas-more" class="secondary show-more" type="button">Show more places ↓</button>
       </section>
+      <section class="planner-band" id="planner" aria-labelledby="planner-title"><div class="wrap">
+        <div class="section-head"><div><p class="eyebrow">02 / THE ONE-DAY PLANNER</p><h2 id="planner-title">One free day? Make it count.</h2><p>Pick how much time you have and what you love. We’ll fit stops and the trip back into your day.</p></div></div>
+        <div class="layout">
+          <section class="panel planner-form" aria-labelledby="form-title">
+            <p class="eyebrow">YOUR CHOICES</p><h3 id="form-title">Set up your trip</h3>
+            <form id="trip">
+              <div class="twocol"><label>Planning hub<select name="hub" required></select></label><label>Start and return point<select name="origin" required></select></label></div>
+              <div class="timegrid">
+                <label>Trip date<input type="date" name="date" required></label>
+                <label>Start (IST)<input type="time" name="from" value="09:00" required></label>
+                <label>Return by (IST)<input type="time" name="until" value="17:00" required></label>
+              </div>
+              <div class="chips presets" aria-label="Time shortcuts"><button type="button" class="chip" data-window="10:00,13:00">3 hours</button><button type="button" class="chip" data-window="09:00,17:00">Full day</button><button type="button" class="chip" data-window="13:00,17:30">Afternoon</button></div>
+              <div class="twocol">
+                <label>Getting around<select name="mode"><option value="car">Taxi or private car</option><option value="foot">On foot</option></select></label>
+                <label>Setting<select name="setting"><option value="any">Indoors or outdoors</option><option value="outdoor">Outdoors</option><option value="indoor">Indoors only</option></select></label>
+              </div>
+              <div class="field"><label for="pace">Pace</label><select id="pace" name="pace" aria-describedby="pace-hint"><option value="regular">Regular · up to 3 stops</option><option value="easy">Easy-going · at most 2 stops</option></select></div>
+              <p class="hint" id="pace-hint">Easy-going allows more walking time and limits walks between stops to 4 km instead of 7 km total. It does not guarantee step-free access.</p>
+              <fieldset><legend>Rank your interests <small>(optional)</small></legend>
+                <div class="chips" id="interests"></div><p class="hint" id="rank" aria-live="polite">Pick up to three, in order. No choices means an open mix.</p>
+              </fieldset>
+              <label class="check"><input type="checkbox" name="lunch" checked> Leave a 40-minute lunch break if the route spans lunchtime</label>
+              <details id="confirmation-details"><summary>Add a locally confirmed stop</summary><p class="hint">Use only if your host confirmed public access for this date.</p><div id="confirmations"></div></details>
+              <button type="submit" class="primary">Build my itinerary <span aria-hidden="true">→</span></button>
+            </form>
+          </section>
+          <section class="panel results" id="results" aria-labelledby="result-title" tabindex="-1">
+            <p class="eyebrow">YOUR ROUTE</p><h3 id="result-title">Your day plan</h3>
+            <p id="status" role="status" aria-live="polite">Choose your trip details to see a route and timeline.</p>
+            <div id="empty-route" class="empty-route" aria-hidden="true"><span>◈</span><svg viewBox="0 0 420 142" fill="none"><path d="M0 110c90-120 122 18 202-11S320-30 420 51M0 129c88-101 133 21 222-14S343-8 420 73M4 86C85-11 132 98 206 79S338-41 421 29" stroke="currentColor" stroke-width="1.5"/><path d="M48 104 134 68l77 32 160-70" stroke="currentColor" stroke-width="3" stroke-dasharray="5 6"/><circle cx="48" cy="104" r="6"/><circle cx="134" cy="68" r="6"/><circle cx="211" cy="100" r="6"/><circle cx="371" cy="30" r="6"/></svg></div>
+            <div id="output"></div>
+          </section>
+        </div>
+      </div></section>
+      <section class="wrap fieldnote" aria-labelledby="fieldnote-title"><p class="eyebrow">A NOTE FROM THE FIELD</p><h2 id="fieldnote-title">Leave the story where you found it.</h2><p>Look closely, stay on permitted paths, and leave rocks and fossils in place. At living cultural sites, follow local guidance and ask before photographing people or ceremonies.</p></section>
     </main>
-    <footer><div class="wrap"><strong>Adilabad Daytrip</strong><p>Research pilot, not a booking or live access service. Verify opening times, closures, walkability and weather before leaving.</p><a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a> · Routes from FOSSGIS OSRM.</div></footer>
-    <noscript><p>This planner needs JavaScript to build a route on your device.</p></noscript>
+    <footer><div class="wrap footer-grid"><div><strong>◈ Fieldday India</strong><p>Research pilot, not a booking or live access service. Verify access, weather and closures first.</p></div><div><a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors</a> · Routes from FOSSGIS OSRM.<p>Lonar photo: <a href="https://commons.wikimedia.org/wiki/File:Lonar_Crater.jpg">Akash Sharma</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>, resized and cropped in display.</p></div></div></footer>
+    <noscript><p>This atlas and planner need JavaScript to filter places and build routes on your device.</p></noscript>
     <script type="module" src="/src/app.js"></script>
   </body>
 </html>

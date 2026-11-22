@@ -1,6 +1,6 @@
-# Adilabad Daytrip
+# Fieldday India
 
-A mobile-first, no-account day planner for Adilabad, Telangana. Enter a date and time window, choose a starting landmark and transport mode, rank interests, and get a round trip with buffered travel times. English UI with Telugu place names. It runs client-side and sends no trip inputs to a routing or analytics service.
+A mobile-first geotourism atlas and one-day planner. Browse India by place, state or union territory, and theme; save ideas on the current device. In Adilabad and Bengaluru, enter a time window, choose a start point, mode and pace, and generate a round trip with buffered travel times. English UI with Telugu names for planning stops. No account or analytics; trip inputs remain on the device.
 
 ## Run and verify
 
@@ -17,10 +17,13 @@ npm run test:browser
 
 ## Data and limitations
 
-- Seven places with per-record sources in `src/catalog.js`, reviewed on 2026-11-22. Gandhi Park and the exterior of Jainath Temple have *planning windows*, not verified hours. Kala Ashram is schedulable only with a locally confirmed window. Four attractions are discovery-only. There is currently no schedulable waterfall itinerary. No live weather, closure, entry fee, or accessible-route guarantees.
+- 48 editorial records covering all 28 states and 8 union territories, with per-place sources in `src/atlas.js` and `src/catalog.js`. A geotourism lens connects landforms to wildlife, architecture, archaeology, museums and farming. Discovery records are not route stops. UNESCO Tentative List citations do not imply World Heritage inscription.
+- The two routing hubs have six eligible stops, including Kala Ashram, which requires a date-specific local confirmation. Adilabad’s two other visits use provisional planning windows. Bengaluru uses conservative windows and excludes Cubbon Park on published closure days. Verify site notices before travel. There are no live weather, closure, entry fee or step-free guarantees. Walking distances refer to travel between mapped stops, not walking inside attractions.
 - `src/routes.json` holds directed estimates from [FOSSGIS OSRM](https://routing.openstreetmap.de/) based on [OpenStreetMap](https://www.openstreetmap.org/copyright) data (ODbL 1.0). It includes distances, simplified geometries and coordinate snap distances. The schematic is not turn-by-turn navigation. Pochera stayed discovery-only after the closest mapped car endpoint snapped about 810 m away from the falls pin.
-- Use `npm run routes:refresh` sparingly after updating the catalog. This maintainer script sends the public points to FOSSGIS at a limited request rate. Review the resulting diff and run all tests before publishing. The shipped app makes no requests to the routing server.
+- Use `npm run routes:refresh -- bengaluru` or `npm run routes:refresh -- adilabad` sparingly after updating the corresponding catalog. Review the resulting diff and run all tests before publishing. The shipped app makes no requests to the routing server.
 - Before expanding coverage, field-check entrances, published hours, walking conditions, closure contacts and actual travel times. In particular, confirm an indoor day with Kala Ashram, and independently verify waterfall parking, walking approaches and access with local authorities. Do not publish the original conversation or recording in this repository.
+- The pilot conversation supplies the core product flow: one free day → indoor/outdoor and ranked interests → transport and preferences → timed routes with optional meals. Cycling, live closures, accommodations, bookings and multi-day trips are not offered yet.
+- Hero photograph: [Lonar Crater](https://commons.wikimedia.org/wiki/File:Lonar_Crater.jpg) by Akash Sharma, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/); resized to WebP and cropped by CSS. The photo derivative remains under the same license.
 
 ## GitHub Pages
 

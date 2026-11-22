@@ -12,5 +12,5 @@
     "test:browser": "playwright test",
     "routes:refresh": "node scripts/refresh-routes.js"
   },
-  "devDependencies": { "@playwright/test": "1.65.1", "vite": "7.3.8" }
+  "devDependencies": { "@axe-core/playwright": "4.14.0", "@playwright/test": "1.65.1", "vite": "7.3.8" }
 }

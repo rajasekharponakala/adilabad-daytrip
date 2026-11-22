@@ -26,17 +26,20 @@ export function planTrip(input, bundle = routes) {
   const ranked = [...new Set((input.ranked ?? []).filter(x => Object.hasOwn(interests,x)))].slice(0,3);
   const skip = new Set(input.skip ?? []);
   const data = bundle.edges[mode];
-  const distanceLimit = mode === 'foot' ? 7000 : Infinity;
+  const easy = input.pace === 'easy';
+  const distanceLimit = mode === 'foot' ? (easy ? 4000 : 7000) : Infinity;
   const candidates = [], unavailable = [];
   const lunch = input.lunch && from <= 12*60+30 && until >= 14*60 ? [12*60+30, 13*60+10] : null;
   const leg = (a,b) => {
     const edge = data?.[`${a}:${b}`];
     if (!edge || edge.snap > 300) return null;
-    const time = mode === 'car' ? Math.ceil(edge.s/60*1.25 + 8) : Math.ceil(edge.s/60*1.15 + 4);
+    const time = mode === 'car' ? Math.ceil(edge.s/60*1.35 + 10) : Math.ceil(edge.s/60*(easy ? 1.35 : 1.15) + 4);
     return { ...edge, time };
   };
   for (const place of places) {
-    if (skip.has(place.id) || place.access === 'discovery' || (input.setting !== 'any' && input.setting !== place.setting)) continue;
+    if (place.hub !== start.hub || skip.has(place.id) || place.access === 'discovery' || (input.setting !== 'any' && input.setting !== place.setting)) continue;
+    const weekday = parsed.getUTCDay();
+    if (place.closedDays?.includes(weekday) || (place.secondTuesday && weekday === 2 && parsed.getUTCDate() >= 8 && parsed.getUTCDate() <= 14)) continue;
     const quality = ranked.length === 0 ? 2 : Math.max(0, ...place.tags.map(t => ranked.includes(t) ? 6 - ranked.indexOf(t)*2 : 0));
     if (!quality) continue;
     const win = (place.access === 'appointment' ? input.confirmed?.[place.id] : place.window)?.map(minute);
@@ -63,7 +66,7 @@ export function planTrip(input, bundle = routes) {
         }
       }
     }
-    if (stops.length >= 3) return;
+    if (stops.length >= (easy ? 2 : 3)) return;
     for (const c of candidates) {
       if (stops.some(s => s.place === c.place)) continue;
       const route = leg(previous, c.place.id);

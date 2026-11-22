@@ -4,10 +4,17 @@ import { places, starts } from '../src/catalog.js';
 
 // Batch fetch only as a maintainer task. The published app makes no routing API calls.
 const nodes = [...starts, ...places.filter(p => p.access !== 'discovery')];
+const previous = JSON.parse((await import('node:fs')).readFileSync(new URL('../src/routes.json', import.meta.url), 'utf8'));
+const scope = process.argv[2];
+if (scope && !nodes.some(p => p.hub === scope)) throw new Error(`Unknown hub: ${scope}`);
 const edges = { car: {}, foot: {} };
+if (scope) for (const mode of ['car','foot']) {
+  const updated = new Set(nodes.filter(p => p.hub === scope).map(p => p.id));
+  for (const [key,value] of Object.entries(previous.edges[mode])) if (!key.split(':').some(id => updated.has(id))) edges[mode][key] = value;
+}
 for (const mode of ['car', 'foot']) {
   for (const a of nodes) for (const b of nodes) {
-    if (a === b || (starts.includes(a) && starts.includes(b)) || (mode === 'foot' && [a.id, b.id].includes('jainath'))) continue;
+    if (a === b || a.hub !== b.hub || (scope && a.hub !== scope) || (starts.includes(a) && starts.includes(b)) || (mode === 'foot' && [a.id, b.id].includes('jainath'))) continue;
     const url = `https://routing.openstreetmap.de/routed-${mode}/route/v1/driving/${a.lon},${a.lat};${b.lon},${b.lat}?overview=simplified&geometries=geojson&radiuses=300;300`;
     const data = JSON.parse(execFileSync('curl', ['-sSL', '--max-time', '20', '--retry', '2', url], { encoding: 'utf8' }));
     if (!data.routes?.[0] && ['NoRoute', 'NoSegment'].includes(data.code)) {

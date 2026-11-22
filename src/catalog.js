@@ -2,14 +2,15 @@ const district = ['Adilabad District · Places of Interest', 'https://adilabad.t
 const kalaPin = ['Spotwander · location', 'https://spotwander.com/place/ChIJueZKJwBd0jsR0ht_aDdH9OQ/kala-ashram'];
 const kata = (...sources) => sources;
 
-export const starts = [
+export const hubs = { adilabad: 'Adilabad', bengaluru: 'Bengaluru' };
+const adilabadStarts = [
   { id: 'station', name: 'Adilabad railway station', te: 'ఆదిలాబాద్ రైల్వే స్టేషన్', lat: 19.68077, lon: 78.53608,
     sources: kata(['Mapcarta · station location', 'https://mapcarta.com/36064514']) },
   { id: 'town', name: 'Adilabad town centre', te: 'ఆదిలాబాద్ పట్టణ కేంద్రం', lat: 19.6759, lon: 78.534,
     sources: kata(['Mapcarta · town reference point', 'https://mapcarta.com/Adilabad']) },
 ];
 
-export const places = [
+const adilabadPlaces = [
   { id: 'gandhi', name: 'Gandhi Park', te: 'గాంధీ పార్క్', area: 'Adilabad town', lat: 19.66, lon: 78.53389,
     tags: ['nature'], setting: 'outdoor', minutes: 35, window: ['08:00', '17:00'], access: 'candidate',
     note: 'A town park for a short outdoor break. The listing reports daylight hours; the planner uses a narrower daytime window. Check the gate and footpaths locally.',
@@ -38,5 +39,27 @@ export const places = [
     note: 'A fall in forest terrain. Discover only: the district describes a lengthy approach through forest; the app does not route visitors there.', sources: kata(district) },
 ];
 
-export const interests = { nature: 'Nature', heritage: 'History & archaeology', culture: 'Arts & culture', geology: 'Rocks & landscapes' };
+export const starts = [
+  ...adilabadStarts.map(p => ({...p, hub:'adilabad'})),
+  { id:'blrm', hub:'bengaluru', name:'Cubbon Park metro', lat:12.9809, lon:77.59756,
+    sources:[['Mapcarta · station location','https://mapcarta.com/N3343297219']] },
+];
+
+export const places = [
+  ...adilabadPlaces.map(p => ({...p, hub:'adilabad', state:'Telangana'})),
+  { id:'lalbagh', hub:'bengaluru', state:'Karnataka', name:'Lalbagh Rock & Botanical Garden', te:'లాల్‌బాగ్ శిల & ఉద్యానవనం', area:'Bengaluru · Main Gate',
+    lat:12.95372, lon:77.58584, tags:['geology','nature'], setting:'outdoor', minutes:100, window:['09:00','17:00'], access:'candidate',
+    note:'Find ancient Peninsular Gneiss inside a botanical garden. The pin is near the main gate; the visit includes time to walk inside. Use the paths and avoid wet exposed rock.',
+    sources:[['Karnataka Tourism · Lalbagh','https://karnatakatourism.org/attractions/lalbagh-botanical-garden/'],['Mapcarta · main gate area','https://mapcarta.com/N2396890413'],['Indian Express · Geological Survey of India on Lalbagh Rock','https://indianexpress.com/article/cities/bangalore/3-billion-year-old-lalbagh-rock-at-risk-from-proposed-hebbal-tunnel-warns-gsi-10865683/']] },
+  { id:'cubbon', hub:'bengaluru', state:'Karnataka', name:'Cubbon Park', te:'కబ్బన్ పార్క్', area:'Central Bengaluru',
+    lat:12.97417, lon:77.59342, tags:['nature'], setting:'outdoor', minutes:55, window:['09:00','17:00'], closedDays:[1], secondTuesday:true, access:'candidate',
+    note:'A city green space for a gentle-paced outing; actual path surfaces vary. Karnataka Tourism lists Mondays and the second Tuesday of each month as closures.',
+    sources:[['Karnataka Tourism · park and visitor information','https://karnatakatourism.org/en/attractions/cubbon-park'],['Mapcarta · park reference point','https://mapcarta.com/25731494']] },
+  { id:'vismuseum', hub:'bengaluru', state:'Karnataka', name:'Visvesvaraya Science Museum', te:'విశ్వేశ్వరయ్య విజ్ఞాన సంగ్రహాలయం', area:'Kasturba Road, Bengaluru',
+    lat:12.97522, lon:77.59643, tags:['science'], setting:'indoor', minutes:85, window:['09:30','17:15'], access:'candidate',
+    note:'An indoor, hands-on science stop. The published day extends later than our planning window; check holiday notices, admission and exhibit access.',
+    sources:[['Visvesvaraya Museum · visitor information','https://vismuseum.gov.in/'],['Mapcarta · museum location','https://mapcarta.com/W327551780']] },
+];
+
+export const interests = { nature:'Nature', heritage:'History & archaeology', culture:'Arts & culture', geology:'Rocks & landscapes', science:'Museums & science', birds:'Birding & wildlife', farm:'Farm experiences' };
 export const reviewed = '2026-11-22';

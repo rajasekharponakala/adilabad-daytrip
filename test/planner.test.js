@@ -67,6 +67,26 @@ test('every catalog record is sourced; routed edges use known nodes and finite g
   for (const mode of ['car','foot']) for (const [pair,x] of Object.entries(bundle.edges[mode])) {
     for (const id of pair.split(':')) { assert.ok(nodes.has(id)); assert.notEqual(nodes.get(id).access,'discovery'); }
     assert.ok(x.m > 0 && x.s > 0 && x.snap <= 300 && x.line.length >= 2);
-    assert.ok(x.line.every(([lon,lat]) => lon > 78 && lon < 79 && lat > 19 && lat < 20));
+    const [a,b] = pair.split(':').map(id=>nodes.get(id));
+    assert.equal(a.hub,b.hub);
+    for (const [[lon,lat],p] of [[x.line[0],a],[x.line.at(-1),b]]) assert.ok(Math.hypot(lon-p.lon,lat-p.lat) < .004);
+    assert.ok(x.line.every(([lon,lat])=>Number.isFinite(lon)&&Number.isFinite(lat)));
   }
+});
+
+test('Bengaluru stays in its hub and still offers indoor access independently of park closures', () => {
+  const change = {origin:'blrm',date:'2026-11-23'}; // Monday
+  assert.ok(run(change).plans.length);
+  assert.ok(run(change).plans.every(p=>p.stops.every(s=>s.place.hub==='bengaluru'&&s.place.id!=='cubbon')));
+  assert.ok(run({...change,date:'2026-12-08'}).plans.every(p=>!ids(p).includes('cubbon'))); // second Tuesday
+  assert.ok(ids(run({...change,date:'2026-12-15'}).plans[0]).includes('cubbon'));
+  assert.deepEqual(ids(run({...change,setting:'indoor',mode:'foot'}).plans[0]),['vismuseum']);
+});
+
+test('easy pace limits walking distance and stop count, with a longer walking allowance', () => {
+  assert.equal(run({mode:'foot',pace:'easy'}).plans.length,0);
+  const local = {origin:'blrm',date:'2026-12-15',mode:'foot'};
+  const easy = run({...local,pace:'easy'}).plans[0], regular = run(local).plans[0];
+  assert.ok(easy.metres <= 4000 && easy.stops.length <= 2);
+  assert.ok(easy.stops[0].route.time > regular.stops.find(s=>s.place.id===easy.stops[0].place.id).route.time || easy.travel > regular.travel);
 });

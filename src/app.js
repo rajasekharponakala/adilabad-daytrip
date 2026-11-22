@@ -1,4 +1,5 @@
-import { interests, places, reviewed, starts } from './catalog.js';
+import { hubs, interests, places, reviewed, starts } from './catalog.js';
+import { atlas, filterAtlas, regions } from './atlas.js';
 import { adilabadToday, clock, minute, planTrip } from './planner.js';
 import './styles.css';
 
@@ -25,7 +26,15 @@ const markerLink = place => Object.assign(el('a','View place pin on OpenStreetMa
 });
 const rank = [], chips = new Map();
 let excluded = [];
-for (const p of starts) form.elements.origin.append(Object.assign(el('option',p.name), {value:p.id}));
+for (const [id,name] of Object.entries(hubs)) form.elements.hub.append(Object.assign(el('option',name), {value:id}));
+function setHub(hub) {
+  form.elements.hub.value = hub;
+  form.elements.origin.replaceChildren(...starts.filter(p => p.hub === hub).map(p => Object.assign(el('option',p.name), {value:p.id})));
+  for (const input of $('confirmations').querySelectorAll('input')) input.value = '';
+  $('confirmation-details').hidden = hub !== 'adilabad';
+  stale();
+}
+form.elements.hub.addEventListener('change', () => setHub(form.elements.hub.value));
 form.elements.date.value = form.elements.date.min = adilabadToday();
 for (const [id,name] of Object.entries(interests)) {
   const button = Object.assign(el('button',name,'chip'), {type:'button'});
@@ -46,12 +55,6 @@ for (const [id,name] of Object.entries(interests)) {
   $('interests').append(button);
 }
 for (const p of places) {
-  const card = el('article',null,'card');
-  const state = {candidate:'Planning estimate', appointment:'Needs local confirmation', discovery:'Discovery only'}[p.access];
-  card.append(el('p', `${p.area} / ${state}`, 'eyebrow'), el('h3',p.name), teName(p),
-    el('p',p.note), el('p',p.tags.map(x => interests[x]).join(' · '),'hint'), links(p));
-  if (p.lat != null && p.access !== 'discovery') card.append(markerLink(p));
-  $('catalog').append(card);
   if (p.access !== 'appointment') continue;
   const box = el('fieldset',null,'appointment'), fields = el('div',null,'twocol');
   box.append(el('legend',p.name));
@@ -63,8 +66,118 @@ for (const p of places) {
   box.append(fields);
   $('confirmations').append(box);
 }
+setHub('adilabad');
+
+for (const [value,label] of [[atlas.length,'places to explore'],[regions.length,'states & territories'],[Object.keys(hubs).length,'planning hubs']]) {
+  const item = el('div',null,'coverage-stat');
+  item.append(el('strong',value),el('span',label));
+  $('coverage').append(item);
+}
+for (const state of regions) $('atlas-state').append(Object.assign(el('option',state),{value:state}));
+const atlasThemes = new Map();
+const knownPlaces = new Set(atlas.map(p => p.id));
+const symbols = { geology:'◈', nature:'≈', culture:'✷', heritage:'◇', science:'✧', birds:'⌁', farm:'✳' };
+let theme = '', pageLimit = 6, savedOnly = false;
+const saved = new Set();
+try {
+  const ids = JSON.parse(localStorage.getItem('fieldday-saved-v1') ?? '[]');
+  if (Array.isArray(ids)) for (const id of ids) if (knownPlaces.has(id)) saved.add(id);
+} catch { /* Browsing still works without local storage. */ }
+
+function atlasCard(p) {
+  const card = el('article',null,'card');
+  card.id = `place-${p.id}`;
+  card.tabIndex = -1;
+  card.dataset.theme = p.tags[0];
+  const label = {candidate:'In the planner', appointment:'Needs confirmation', discovery:'Discovery only'}[p.access];
+  const flag = el('p',label,'flag');
+  flag.dataset.access = p.access;
+  const artwork = el('div',null,'card-art');
+  artwork.append(flag,el('span',symbols[p.tags[0]],'card-symbol'));
+  artwork.lastChild.setAttribute('aria-hidden','true');
+  const body = el('div',null,'card-body');
+  const eyebrow = el('p',p.state,'eyebrow');
+  const title = el('h3',p.name);
+  body.append(eyebrow,title);
+  if (p.te) body.append(teName(p));
+  const tags = el('ul',null,'tag-list');
+  tags.append(...p.tags.map(t => el('li',interests[t])));
+  const source = el('details',null,'source-details');
+  source.append(el('summary','Sources and visit notes'),links(p));
+  if (p.lat != null && p.access !== 'discovery') source.append(markerLink(p));
+  const actions = el('div',null,'card-actions');
+  const save = Object.assign(el('button',saved.has(p.id)?'Saved':'Save place','secondary'),{type:'button'});
+  const labelSave = () => save.setAttribute('aria-label',`${saved.has(p.id)?'Saved':'Save place'}: ${p.name}`);
+  labelSave();
+  save.setAttribute('aria-pressed',String(saved.has(p.id)));
+  save.addEventListener('click',() => {
+    if (saved.has(p.id)) saved.delete(p.id); else saved.add(p.id);
+    try { localStorage.setItem('fieldday-saved-v1', JSON.stringify([...saved])); } catch { /* Saves stay in this tab. */ }
+    save.textContent = saved.has(p.id) ? 'Saved' : 'Save place';
+    labelSave();
+    save.setAttribute('aria-pressed',String(saved.has(p.id)));
+    updateSaved();
+    if (savedOnly) { renderAtlas(); $('saved-only').focus({preventScroll:true}); }
+  });
+  actions.append(save);
+  if (p.hub && p.access !== 'discovery') {
+    const go = Object.assign(el('a','Open planner ↗'),{href:'#planner'});
+    go.addEventListener('click',() => setHub(p.hub));
+    actions.append(go);
+  }
+  body.append(el('p',p.area,'card-area'),el('p',p.note,'card-note'),tags,source,actions);
+  card.append(artwork,body);
+  return card;
+}
+function updateSaved() {
+  $('saved-only').textContent = `Saved places (${saved.size})`;
+  $('saved-only').setAttribute('aria-pressed',String(savedOnly));
+}
+function renderAtlas() {
+  const filtered = filterAtlas({query:$('atlas-query').value,state:$('atlas-state').value,theme}).filter(p => !savedOnly || saved.has(p.id));
+  const shown = filtered.slice(0,pageLimit);
+  $('atlas-count').textContent = `Showing ${shown.length} of ${filtered.length} ${savedOnly?'saved ':''}${filtered.length===1?'place':'places'}`;
+  $('atlas-more').hidden = shown.length >= filtered.length;
+  $('catalog').replaceChildren(...shown.map(atlasCard));
+  if (!filtered.length) $('catalog').append(el('p',savedOnly ? 'No saved places match. Turn off Saved places or clear your filters.' : 'No places match yet. Try another search or a broader filter.','atlas-empty'));
+  for (const [key,button] of atlasThemes) button.setAttribute('aria-pressed',String(theme===key));
+  updateSaved();
+}
+for (const [id,name] of [['','All themes'],...Object.entries(interests)]) {
+  const button = Object.assign(el('button',name,'chip'),{type:'button'});
+  button.addEventListener('click',() => { theme=id; pageLimit=6; renderAtlas(); });
+  atlasThemes.set(id,button);
+  $('atlas-themes').append(button);
+}
+for (const [id,event] of [['atlas-query','input'],['atlas-state','change']]) $(id).addEventListener(event,() => { pageLimit=6; renderAtlas(); });
+$('saved-only').addEventListener('click',() => { savedOnly=!savedOnly; pageLimit=6; renderAtlas(); });
+$('atlas-more').addEventListener('click',() => {
+  const current = pageLimit;
+  pageLimit += 6;
+  renderAtlas();
+  $('catalog').children[current]?.focus({preventScroll:true});
+});
+$('lonar-link').addEventListener('click',event => {
+  event.preventDefault();
+  $('atlas-query').value=''; $('atlas-state').value=''; theme=''; savedOnly=false; pageLimit=6;
+  renderAtlas();
+  $('place-lonar').focus({preventScroll:true});
+  $('place-lonar').scrollIntoView();
+});
+renderAtlas();
+for (const b of form.querySelectorAll('[data-window]')) b.addEventListener('click',() => {
+  const [from,until] = b.dataset.window.split(',');
+  form.elements.from.value = from; form.elements.until.value = until;
+  updatePresets(); stale();
+});
+function updatePresets() {
+  const current = `${form.elements.from.value},${form.elements.until.value}`;
+  for (const b of form.querySelectorAll('[data-window]')) b.setAttribute('aria-pressed',String(b.dataset.window===current));
+}
+updatePresets();
 
 function stale() {
+  $('empty-route').hidden = false;
   if (!output.childElementCount) return;
   output.replaceChildren();
   status.textContent = 'Trip details changed. Build your itinerary again.';
@@ -73,6 +186,7 @@ form.addEventListener('input', event => {
   if (event.target === form.elements.date) {
     for (const field of $('confirmations').querySelectorAll('input')) field.value = '';
   }
+  updatePresets();
   stale();
 });
 
@@ -105,6 +219,7 @@ function generate(focus = true) {
   const fields = new FormData(form);
   const confirmed = {};
   output.replaceChildren();
+  $('empty-route').hidden = false;
   if (focus) $('results').focus();
   for (const p of places.filter(p => p.access === 'appointment')) {
     const open = fields.get(`${p.id}-open`), close = fields.get(`${p.id}-close`);
@@ -116,7 +231,7 @@ function generate(focus = true) {
     confirmed[p.id] = [open,close];
   }
   const result = planTrip({ origin:fields.get('origin'), date:fields.get('date'), from:fields.get('from'), until:fields.get('until'),
-    mode:fields.get('mode'), setting:fields.get('setting'), lunch:fields.has('lunch'), ranked:rank, confirmed, skip:excluded });
+    mode:fields.get('mode'), setting:fields.get('setting'), pace:fields.get('pace'), lunch:fields.has('lunch'), ranked:rank, confirmed, skip:excluded });
   if (result.error) { status.textContent = result.error; return; }
   if (excluded.length) {
     const reset = Object.assign(el('button','Restore skipped stops','secondary'), {type:'button'});
@@ -126,9 +241,17 @@ function generate(focus = true) {
   if (!result.plans.length) {
     status.textContent = 'No matching round trip fits these choices. Try a longer window, a different transport option, or fewer interests.';
     if (result.unavailable.length) output.append(el('p',`Needs a locally confirmed visit window: ${result.unavailable.join(', ')}.`,'hint'));
+    if (rank.length) {
+      const browse = Object.assign(el('a',`Browse ${interests[rank[0]]} in the atlas ↗`),{href:'#places'});
+      browse.addEventListener('click',()=>{
+        $('atlas-query').value=''; $('atlas-state').value=''; theme=rank[0]; savedOnly=false; pageLimit=6; renderAtlas();
+      });
+      output.append(browse);
+    }
     return;
   }
   status.textContent = 'Planning estimate, not a live access check. Confirm gates, weather, and local access before leaving.';
+  $('empty-route').hidden = true;
   if (result.unavailable.length) output.append(el('p',`Not scheduled without local confirmation: ${result.unavailable.join(', ')}.`,'hint'));
   const selector = el('div',null,'choices'), detail = el('div');
   output.append(selector, detail);
@@ -142,7 +265,7 @@ function generate(focus = true) {
       const li = el('li');
       const travel = el('p',`Leave previous point ${clock(s.depart)} · allow ${s.route.time} min ${mode==='foot'?'on foot':'by road'}${s.begin > s.arrival ? ` · arrive ${clock(s.arrival)}, then wait` : ''}`,'hint');
       const skip = Object.assign(el('button','Skip stop & replan','secondary'), {type:'button'});
-      skip.setAttribute('aria-label',`Skip ${s.place.name} and replan`);
+      skip.setAttribute('aria-label',`Skip stop & replan: ${s.place.name}`);
       skip.addEventListener('click', () => { excluded.push(s.place.id); generate(); });
       li.append(el('h3',`${j+1}. ${s.place.name}`),teName(s.place),el('p',`${clock(s.begin)}–${clock(s.end)} · ${s.place.tags.map(t=>interests[t]).join(' / ')}`,'visit'),travel,el('p',s.place.note),markerLink(s.place),skip);
       return [s.begin,li];
@@ -150,7 +273,10 @@ function generate(focus = true) {
     if (plan.lunch) entries.push([plan.lunch[0],el('li',`${clock(plan.lunch[0])}–${clock(plan.lunch[1])} · Lunch break (bring food or confirm a venue)`, 'break')]);
     entries.push([plan.back.end,el('li',`${clock(plan.back.end)} · Return to ${plan.start.name} (depart ${clock(plan.back.depart)}; allow ${plan.back.route.time} min)`,'break')]);
     timeline.append(...entries.sort((a,b)=>a[0]-b[0]).map(([,li])=>li));
-    detail.replaceChildren(stats,routeMap(plan),timeline,el('p',`Routing snapshot: ${result.routesDate}. Place sources reviewed ${reviewed}; no field audit yet.`, 'hint'));
+    const meta = el('p',`${hubs[plan.start.hub]} · ${fields.get('date')} · ${mode==='foot'?'On foot':'By car'} · IST`,'hint');
+    const print = Object.assign(el('button','Print or save as PDF','secondary print-route'),{type:'button'});
+    print.addEventListener('click',() => window.print());
+    detail.replaceChildren(meta,stats,routeMap(plan),timeline,el('p',`Routing snapshot: ${result.routesDate}. Place sources reviewed ${reviewed}; no field audit yet.`, 'hint'),print);
   };
   if (result.plans.length > 1) result.plans.forEach((_,i) => {
     const button = Object.assign(el('button', i ? 'Alternative' : 'Recommended','chip'), {type:'button'});
