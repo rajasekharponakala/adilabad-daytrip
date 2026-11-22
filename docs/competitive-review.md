@@ -1,5 +1,7 @@
 # Fieldday India: competitive review
 
+**Follow-up:** See the [hands-on traveller benchmark](traveller-benchmark.md) for attempts to complete the same free-day task through public products. Fieldday’s integrated release was also exercised on the live Pages site: searching **Prakrit inscription** led through the Jainath guide to a plan returning to Adilabad railway station at **11:52 IST**; **Peninsular Gneiss** led through Lalbagh’s guide to a plan returning to Cubbon Park metro at **14:48 IST**. These are planner estimates, not timed field visits.
+
 **Desk review · 22 November 2026 · repository baseline `bc63e19`.** Scope: India-first discovery and one-day planning, with global benchmarks for interpretation, routing and field observation. The links below are publisher pages, public product surfaces or operator documentation. “Observed” means visible there or in the baseline source; a documented feature is not an independently tested feature. This is not a survey of every paid tier, an on-site access audit or evidence of market demand. Where a capability was not found on the sampled pages, that does not establish its absence from the whole product.
 
 **Recommendation (inferred):** Keep national discovery and local itinerary coverage separate. Make the two existing hubs better at answering *“What fits my free day, what should I notice, and what must I verify before leaving?”* Competing on more pins, richer maps or a bigger gallery is a weaker bet than making the handoff from a good field guide to a realistic visit dependable.
