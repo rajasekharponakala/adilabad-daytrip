@@ -34,7 +34,7 @@ public class OfflineJourneyTest {
             until(app,"location.pathname.endsWith('/places/lonar/') && document.querySelector('h1')?.textContent==='Lonar Crater'");
             app.onActivity(MainActivity::onBackPressed);until(app,"document.documentElement.dataset.screen==='saved'");
             tab(app,3);until(app,"document.querySelector('[data-geo-model=deccan]')");
-            js(app,"document.querySelector('[data-geo-model=deccan]').click();document.querySelector('[data-geo-stage=1]').click()");
+            js(app,"document.querySelector('[data-geo-model=deccan]').click();document.querySelector('[data-geo-stage=\"1\"]').click()");
             until(app,"document.querySelector('#lab-mount canvas')?.getAttribute('aria-label').includes('First flow')");
             tab(app,2);until(app,"document.documentElement.dataset.screen==='plan'");
             js(app,"document.querySelector('#trip button[type=submit]').click()");
