@@ -1,5 +1,7 @@
 # Fieldday India
 
+**Android:** [Download the pilot APK](https://github.com/rajasekharponakala/adilabad-daytrip/releases/tag/android-v1.0.0-pilot) · [Build and installation guide](docs/android.md) · [Android CI](https://github.com/rajasekharponakala/adilabad-daytrip/actions/workflows/android.yml)
+
 A mobile-first geotourism atlas and one-day planner. Browse India by place, state or union territory, and theme; save ideas on the current device. In Adilabad and Bengaluru, enter a time window, choose a start point, mode and pace, and generate a round trip with buffered travel times. English UI with Telugu names for planning stops. No account or analytics; trip inputs remain on the device.
 
 The 3D Geo Lab is an on-demand set of seven educational models. It covers Lonar’s meteorite impact, Deccan lava flows, cooling joints at St. Mary’s Islands, cliff retreat at Varkala, cave formation in Meghalaya, river-island change at Majuli, and water storage at Dholavira. Each exhibit has three stages and keyboard, button and pointer rotation. The models are schematic, not measured terrain, archaeological reconstructions or numerical forecasts. No API key, account, or external 3D service is required.

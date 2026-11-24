@@ -17,6 +17,7 @@ import android.widget.*;
 import androidx.webkit.WebViewAssetLoader;
 import java.io.ByteArrayInputStream;
 import java.util.Collections;
+import java.util.ArrayList;
 
 public final class MainActivity extends Activity {
     static final String HOST="appassets.androidplatform.net", BASE="https://"+HOST+"/assets/";
@@ -24,6 +25,9 @@ public final class MainActivity extends Activity {
     static final int DARK=Color.rgb(29,56,44), PAPER=Color.rgb(248,244,233), LIME=Color.rgb(222,236,134);
     WebView web; TextView heading,back; LinearLayout navigation; final LinearLayout[] tabs=new LinearLayout[TABS.length];
     private int selected;
+    // Chromium can skip fragment entries without a WebView user gesture, including
+    // native tab presses. Maintain the app's own destination history instead.
+    private final ArrayList<String> trail=new ArrayList<>();
     int dp(int value){return Math.round(getResources().getDisplayMetrics().density*value);}
     TextView label(String value,int size,int color,boolean bold){TextView v=new TextView(this);v.setText(value);v.setTextSize(size);v.setTextColor(color);v.setGravity(Gravity.CENTER);if(bold)v.setTypeface(Typeface.DEFAULT,Typeface.BOLD);return v;}
     @Override public void onCreate(Bundle state){super.onCreate(state);
@@ -48,23 +52,25 @@ public final class MainActivity extends Activity {
                 if(request.isForMainFrame() && HOST.equals(u.getHost()) && "/native/print".equals(u.getPath())){PrintManager p=(PrintManager)getSystemService(PRINT_SERVICE);p.print("Fieldday itinerary",web.createPrintDocumentAdapter("Fieldday itinerary"),null);}
                 else if(request.isForMainFrame() && request.hasGesture() && "https".equals(u.getScheme()) && !HOST.equals(u.getHost())){try{startActivity(new Intent(Intent.ACTION_VIEW,u));}catch(ActivityNotFoundException e){Toast.makeText(MainActivity.this,"No browser installed",Toast.LENGTH_SHORT).show();}}return true;}
             @Override public void onPageFinished(WebView v,String url){updateChrome(url);}
-            @Override public void doUpdateVisitedHistory(WebView v,String url,boolean reload){updateChrome(url);}
+            @Override public void doUpdateVisitedHistory(WebView v,String url,boolean reload){remember(url);updateChrome(url);}
         });
         navigation=new LinearLayout(this);navigation.setBackgroundColor(DARK);root.addView(navigation,-1,dp(66));
         for(int i=0;i<TABS.length;i++){int n=i;LinearLayout tab=new LinearLayout(this);tabs[i]=tab;tab.setOrientation(LinearLayout.VERTICAL);tab.setGravity(Gravity.CENTER);tab.setFocusable(true);tab.setContentDescription(TABS[i]);tab.setOnClickListener(v->openTab(n));navigation.addView(tab,new LinearLayout.LayoutParams(0,-1,1));
             tab.addView(label(ICONS[i],21,Color.WHITE,true));tab.addView(label(TABS[i],12,Color.WHITE,true));}
+        if(state!=null && state.getStringArrayList("trail")!=null)trail.addAll(state.getStringArrayList("trail"));
         if(state==null || web.restoreState(state)==null)openTab(0);
     }
     boolean local(Uri uri){return "https".equals(uri.getScheme()) && HOST.equals(uri.getAuthority()) && uri.getPath()!=null && uri.getPath().startsWith("/assets/");}
-    void openTab(int i){web.loadUrl(BASE+"#"+HASH[i]);}
+    private void remember(String url){if(url!=null && local(Uri.parse(url)) && (trail.isEmpty()||!url.equals(trail.get(trail.size()-1)))){trail.add(url);if(trail.size()>100)trail.remove(0);}}
+    void openTab(int i){String url=BASE+"#"+HASH[i];remember(url);web.loadUrl(url);}
     void updateChrome(String url){if(navigation==null||url==null)return;Uri u=Uri.parse(url);String path=u.getPath(),hash=u.getFragment();boolean detail=path!=null && !(path.equals("/assets/")||path.equals("/assets/index.html"));int idx=0;
         if(detail || "places".equals(hash) || (hash!=null && hash.startsWith("place-")))idx=1;
         else for(int i=0;i<HASH.length;i++)if(HASH[i].equals(hash))idx=i;
         selected=idx;heading.setText(detail?(path.contains("/layers/")?"Heritage layers":"Field guide"):idx==0?"Fieldday India":new String[]{"Discover","Explore India","Day planner","3D Geo Lab","Field notebook"}[idx]);
-        back.setText(web.canGoBack()?"‹":"◈");back.setEnabled(web.canGoBack());
+        back.setText(trail.size()>1?"‹":"◈");back.setEnabled(trail.size()>1);
         for(int i=0;i<tabs.length;i++){LinearLayout t=tabs[i];if(t==null)continue;boolean active=i==idx;t.setSelected(active);GradientDrawable pill=new GradientDrawable();pill.setColor(active?LIME:DARK);pill.setCornerRadius(dp(14));t.setBackground(pill);for(int j=0;j<t.getChildCount();j++)((TextView)t.getChildAt(j)).setTextColor(active?DARK:Color.WHITE);}
     }
-    @Override public void onBackPressed(){if(web.canGoBack())web.goBack();else if(selected!=0)openTab(0);else super.onBackPressed();}
-    @Override protected void onSaveInstanceState(Bundle state){super.onSaveInstanceState(state);web.saveState(state);}
+    @Override public void onBackPressed(){if(trail.size()>1){trail.remove(trail.size()-1);web.loadUrl(trail.get(trail.size()-1));}else if(selected!=0)openTab(0);else super.onBackPressed();}
+    @Override protected void onSaveInstanceState(Bundle state){super.onSaveInstanceState(state);web.saveState(state);state.putStringArrayList("trail",new ArrayList<>(trail));}
     @Override protected void onDestroy(){web.stopLoading();web.destroy();super.onDestroy();}
 }
