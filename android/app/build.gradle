@@ -1,0 +1,34 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'in.fieldday.atlas'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'in.fieldday.atlas'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '1.0.0-pilot'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+    sourceSets.main.assets.srcDir layout.buildDirectory.dir('generated/fielddayAssets')
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+dependencies {
+    implementation 'androidx.webkit:webkit:1.12.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+}
+
+tasks.register('prepareOfflineAtlas', Exec) {
+    workingDir rootProject.projectDir.parentFile
+    inputs.dir '../../dist'
+    inputs.dir '../mobile'
+    inputs.file '../../scripts/android-assets.js'
+    outputs.dir layout.buildDirectory.dir('generated/fielddayAssets')
+    commandLine 'node', 'scripts/android-assets.js'
+}
+tasks.named('preBuild').configure { dependsOn 'prepareOfflineAtlas' }
